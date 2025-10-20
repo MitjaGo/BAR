@@ -1,6 +1,5 @@
 # sample requirements.txt
 gspread
-gsheet
 ipywidgets
 numpy 
 pandas 
