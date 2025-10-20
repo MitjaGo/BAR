@@ -1,8 +1,0 @@
-# sample requirements.txt
-gspread
-ipywidgets
-numpy 
-pandas 
-voila
-ipython
-nbgitpuller
