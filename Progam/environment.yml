@@ -1,0 +1,10 @@
+channels:
+  - conda-forge
+dependencies:
+  - gspread
+  - ipywidgets
+  - numpy 
+  - pandas 
+  - voila
+  - ipython
+  - nbgitpuller
