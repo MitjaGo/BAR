@@ -8,4 +8,5 @@ dependencies:
   - voila
   - ipython
   - nbgitpuller
+  - ipyvuetify
 
