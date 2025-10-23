@@ -8,3 +8,4 @@ dependencies:
   - voila
   - ipython
   - nbgitpuller
+  - solara
