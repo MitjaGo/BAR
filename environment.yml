@@ -8,5 +8,3 @@ dependencies:
   - voila
   - ipython
   - nbgitpuller 
-env:
-  MYBINDER_PASSWORD: ${{ secrets.MYBINDER_PASSWORD }}
