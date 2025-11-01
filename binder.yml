@@ -1,0 +1,24 @@
+jobs:
+  run-notebook:
+    runs-on: ubuntu-latest
+
+    env:
+      MYBINDER_PASSWORD: ${{ secrets.MYBINDER_PASSWORD }}
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Conda environment
+        uses: conda-incubator/setup-miniconda@v3
+        with:
+          environment-file: environment.yml
+          activate-environment: myenv
+
+      - name: Execute notebook
+        run: |
+          jupyter nbconvert --execute BAR_beta_V3.ipynb --to notebook --output executed_BAR_beta_V3.ipynb
+
+
+
+
