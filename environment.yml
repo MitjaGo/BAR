@@ -1,10 +1,11 @@
-channels:
-  - conda-forge
+name: myenv
 dependencies:
+  - python=3.11
+  - notebook
+  - ipython
   - gspread
   - ipywidgets
   - numpy 
   - pandas 
   - voila
-  - ipython
   - nbgitpuller 
