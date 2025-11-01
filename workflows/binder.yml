@@ -1,27 +1,28 @@
-name: Launch MyBinder
+name: Run Notebook on Push
 
 on:
   push:
     branches: [ "main" ]
 
 jobs:
-  build:
+  run-notebook:
     runs-on: ubuntu-latest
 
     env:
       MYBINDER_PASSWORD: ${{ secrets.MYBINDER_PASSWORD }}
 
     steps:
-      - name: Checkout
+      - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Set up Conda
+      - name: Set up Conda environment
         uses: conda-incubator/setup-miniconda@v3
         with:
           environment-file: environment.yml
           activate-environment: myenv
 
-      - name: Run Notebook
+      - name: Execute notebook
         run: |
-          jupyter nbconvert --execute my_notebook.ipynb
+          jupyter nbconvert --execute notebooks/my_notebook.ipynb --to notebook --output executed_notebook.ipynb
+
 
