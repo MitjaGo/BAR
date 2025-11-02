@@ -26,6 +26,15 @@ st.set_page_config(page_title="EXPORT4PHOBS", layout="wide")
 # PASSWORD LOGIN
 # -------------------------------
 
+# Initialize session state
+if "authenticated" not in st.session_state:
+    st.session_state.authenticated = False
+if "login_attempted" not in st.session_state:
+    st.session_state.login_attempted = False
+
+# Login screen
+if not st.session_state.authenticated:
+
 st.markdown(
     """
     <div style="display:flex;justify-content:space-between;align-items:center;">
@@ -37,14 +46,7 @@ st.markdown(
     unsafe_allow_html=True
 )
 
-# Initialize session state
-if "authenticated" not in st.session_state:
-    st.session_state.authenticated = False
-if "login_attempted" not in st.session_state:
-    st.session_state.login_attempted = False
-
-# Login screen
-if not st.session_state.authenticated:
+    
     st.markdown("## 🔒 Za dostop do aplikacije se prijavi")
 
     password = st.text_input("Vnesi geslo", type="password")
