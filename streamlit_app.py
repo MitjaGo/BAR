@@ -30,42 +30,37 @@ st.set_page_config(page_title="EXPORT4PHOBS", layout="wide")
 # Initialize session state
 if "authenticated" not in st.session_state:
     st.session_state.authenticated = False
+if "login_attempted" not in st.session_state:
+    st.session_state.login_attempted = False
 
+# Login screen
 if not st.session_state.authenticated:
     st.markdown("## 🔒 Za dostop do aplikacije se prijavi")
 
     password = st.text_input("Vnesi geslo", type="password")
 
-    # Apply custom CSS only for the login button
-    st.markdown(
-        """
+    # Style the login button
+    st.markdown("""
         <style>
         div.stButton>button {
             background-color: #1cb319;
             color: white;
             cursor: pointer;
         }
-
         div.stButton>button:hover {
             background-color: #4fb34d;
         }
         </style>
-        """,
-        unsafe_allow_html=True
-    )
+    """, unsafe_allow_html=True)
 
     if st.button("Odkleni Aplikacijo"):
+        st.session_state.login_attempted = True
         if password == PASSWORD:
             st.session_state.authenticated = True
-            st.success("✅ Access Granted!")
-            st.experimental_rerun()  # this usually works; if it errors, see note below
         else:
             st.error("❌ Incorrect password. Please try again.")
 
     st.stop()  # stop here if not authenticated
-
-# App content for authenticated users
-st.write("Welcome! You are authenticated.")
 
 
 # -------------------------------
