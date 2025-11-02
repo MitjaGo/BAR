@@ -107,17 +107,20 @@ st.markdown(
         flex: 1 1 100%;
     }
 }
-.custom-download button {
-    width: 100% !important;
-    background-color: #5392ca !important;
-    color: white !important;
-    font-weight: 600 !important;
-    padding: 10px 16px !important;
-    border-radius: 8px !important;
-    transition: 0.3s !important;
+.custom-download {
+    display: block;
+    width: 100%;
+    background-color: #5392ca;
+    color: white;
+    font-weight: 600;
+    padding: 10px 16px;
+    border-radius: 8px;
+    text-align: center;
+    text-decoration: none;
+    transition: 0.3s;
 }
-.custom-download button:hover {
-    background-color: #417fb4 !important;
+.custom-download:hover {
+    background-color: #417fb4;
 }
 </style>
 """,
@@ -169,9 +172,6 @@ st.caption(f"Last refreshed at: {datetime.now().strftime('%H:%M:%S')}")
 # -------------------------------
 # HOTEL CSV DOWNLOAD BUTTONS (RESPONSIVE FLEXBOX)
 # -------------------------------
-# -------------------------------
-# HOTEL CSV DOWNLOAD BUTTONS (RESPONSIVE FLEXBOX)
-# -------------------------------
 st.markdown('<div class="button-row">', unsafe_allow_html=True)
 
 failed = []
@@ -189,22 +189,15 @@ for idx, row in master_df.iterrows():
         csv_data = convert_df_to_csv_download(df)
         b64 = base64.b64encode(csv_data).decode()
 
-        # Create a proper download link
-        href = f'data:text/csv;base64,{b64}'
+        # Fully responsive download button using <a> tag
         btn_html = f"""
         <div class='button-item'>
-            <a href="{href}" download="{hotel_name}-Phobs.csv" class="custom-download">
+            <a href="data:text/csv;base64,{b64}" download="{hotel_name}-Phobs.csv" class="custom-download">
                 📥 {hotel_name}.csv
             </a>
         </div>
         """
         st.markdown(btn_html, unsafe_allow_html=True)
-
-    except Exception as e:
-        failed.append((hotel_name, str(e)))
-
-st.markdown('</div>', unsafe_allow_html=True)
-
 
     except Exception as e:
         failed.append((hotel_name, str(e)))
