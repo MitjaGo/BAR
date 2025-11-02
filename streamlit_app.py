@@ -12,7 +12,7 @@ import streamlit as st
 # ENVIRONMENT & PASSWORD SETUP
 # -------------------------------
 load_dotenv()
-PASSWORD = os.getenv("MY")  # fallback if not set
+PASSWORD = os.getenv("MY", "test")  # fallback if not set
 
 # -------------------------------
 # PAGE CONFIG
@@ -54,7 +54,9 @@ st.markdown(
 # -------------------------------
 # EMBED GOOGLE SHEET
 # -------------------------------
-gsheet_url = "https://docs.google.com/spreadsheets/d/15HJ7wxyUmo-gcl5_y1M9gl4Ti-JSsYEJZCjoI76s-Xk/edit#gid=1385640257"
+gsheet_id = "15HJ7wxyUmo-gcl5_y1M9gl4Ti-JSsYEJZCjoI76s-Xk"
+gsheet_url = f"https://docs.google.com/spreadsheets/d/{gsheet_id}/edit#gid=1385640257"
+
 st.markdown("### 📊 Linked Google Sheet (PHOBS Master Data)")
 st.components.v1.iframe(gsheet_url, height=550)
 
@@ -140,7 +142,6 @@ if st.button("🔄 Reload Data", type="primary"):
 
 @st.cache_data(ttl=600)
 def load_master_data():
-    gsheet_id = "15HJ7wxyUmo-gcl5_y1M9gl4Ti-JSsYEJZCjoI76s-Xk"
     master_url = f"https://docs.google.com/spreadsheets/d/{gsheet_id}/gviz/tq?tqx=out:csv&sheet=PHOBS"
     return pd.read_csv(master_url)
 
@@ -192,6 +193,7 @@ if failed:
     st.warning("⚠️ Some hotels failed to load:")
     for h, e in failed:
         st.text(f"{h}: {e}")
+
 
 
 
