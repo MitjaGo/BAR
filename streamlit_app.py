@@ -90,11 +90,18 @@ st.markdown(
     .stButton>button {
         background-color: #f6b221;
         color: white;
+        cursor: pointer;
+    }
+
+    /* Hover effect */
+    .stDownloadButton>button:hover {
+        background-color: #f7c24f;
     }
     </style>
     """,
     unsafe_allow_html=True
 )
+
 
 st.markdown(
     """
@@ -108,7 +115,7 @@ st.markdown(
 
     /* Hover effect */
     .stDownloadButton>button:hover {
-        background-color: #3973e6;
+        background-color: #4184bf;
     }
     </style>
     """,
