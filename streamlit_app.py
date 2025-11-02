@@ -34,7 +34,6 @@ if "login_attempted" not in st.session_state:
 
 # Login screen
 if not st.session_state.authenticated:
-
 st.markdown(
     """
     <div style="display:flex;justify-content:space-between;align-items:center;">
@@ -45,7 +44,6 @@ st.markdown(
     """,
     unsafe_allow_html=True
 )
-
     
     st.markdown("## 🔒 Za dostop do aplikacije se prijavi")
 
