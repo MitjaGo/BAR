@@ -94,7 +94,7 @@ st.markdown(
     }
 
     /* Hover effect */
-    .stDownloadButton>button:hover {
+   .stButton>button:hover {
         background-color: #f7c24f;
     }
     </style>
