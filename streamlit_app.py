@@ -26,6 +26,10 @@ st.set_page_config(page_title="EXPORT4PHOBS", layout="wide")
 # PASSWORD LOGIN
 # -------------------------------
 
+import streamlit as st
+
+PASSWORD = "your_password_here"
+
 # Initialize session state
 if "authenticated" not in st.session_state:
     st.session_state.authenticated = False
@@ -35,11 +39,10 @@ if not st.session_state.authenticated:
 
     password = st.text_input("Vnesi geslo", type="password")
 
-    # Apply custom CSS only for this button
+    # Apply custom CSS only for the login button
     st.markdown(
         """
         <style>
-        /* Style only the first button (login button) */
         div.stButton>button {
             background-color: #1cb319;
             color: white;
@@ -58,14 +61,14 @@ if not st.session_state.authenticated:
         if password == PASSWORD:
             st.session_state.authenticated = True
             st.success("✅ Access Granted!")
-            st.experimental_rerun()  # rerun the app after login
+            st.experimental_rerun()  # this usually works; if it errors, see note below
         else:
             st.error("❌ Incorrect password. Please try again.")
 
-    st.stop()  # Stop here if not authenticated
+    st.stop()  # stop here if not authenticated
 
-# Your app content goes here
-st.write("Dobrodošli! Vaš dostop je bil potrjen.")
+# App content for authenticated users
+st.write("Welcome! You are authenticated.")
 
 
 # -------------------------------
