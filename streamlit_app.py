@@ -88,12 +88,39 @@ st.markdown(
     """
     <style>
     .stButton>button {
-        background-color: #4CAF50;
+        background-color: #f6b221;
         color: white;
     }
     </style>
     """,
     unsafe_allow_html=True
+)
+
+st.markdown(
+    """
+    <style>
+    /* Style all download buttons */
+    .stDownloadButton>button {
+        background-color: #5392ca;
+        color: white;
+        cursor: pointer;
+    }
+
+    /* Hover effect */
+    .stDownloadButton>button:hover {
+        background-color: #3973e6;
+    }
+    </style>
+    """,
+    unsafe_allow_html=True
+)
+
+# Example download button
+st.download_button(
+    label="Download File",
+    data="Hello, world!",
+    file_name="example.txt",
+    mime="text/plain"
 )
 
 
