@@ -15,7 +15,7 @@ import streamlit as st
 # ENVIRONMENT & PASSWORD SETUP
 # -------------------------------
 load_dotenv()
-PASSWORD = os.getenv("MY", "test")  # fallback password if not set
+PASSWORD = os.getenv("MY")  # fallback password if not set
 
 # -------------------------------
 # PAGE CONFIG
@@ -61,7 +61,10 @@ if not st.session_state.authenticated:
             st.error("❌ Incorrect password. Please try again.")
 
     st.stop()  # stop here if not authenticated
-
+ 
+    # App content for authenticated users
+    st.write("##### ✅ Dobrodošlel! Uživaj v delu.")
+    # Add the rest of your app below
 
 # -------------------------------
 # MAIN APP (after login)
@@ -180,7 +183,7 @@ st.markdown(
 # -------------------------------
 
 
-st.markdown("#### BAR Export.csv Generator")
+st.markdown("##### BAR Export.csv Generator")
 
 if st.button("🔄 Osveži podatke"):
     st.cache_data.clear()
