@@ -10,7 +10,6 @@ from datetime import datetime
 from dotenv import load_dotenv
 import streamlit as st
 from streamlit_extras.stylable_container import stylable_container
-
 # -------------------------------
 # ENVIRONMENT & PASSWORD SETUP
 # -------------------------------
