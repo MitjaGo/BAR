@@ -85,12 +85,14 @@ if not st.session_state.authenticated:
 
 # App content for authenticated users
 
-# Green welcome text
-st.markdown('✅ <span style="color:green;font-size:20px; font-weight:bold;">BAR Urejevalnik!</span>', unsafe_allow_html=True)
-
 # -------------------------------
 # MAIN APP (after login)
 # -------------------------------
+
+
+# BAR Urejevalnik)
+st.markdown('✅ <span style="color:green;font-size:25px; font-weight:bold;">BAR Urejevalnik!</span>', unsafe_allow_html=True)
+
 
 #Sheet URL - new tab
 sheet_url = "https://docs.google.com/spreadsheets/d/15HJ7wxyUmo-gcl5_y1M9gl4Ti-JSsYEJZCjoI76s-Xk/edit?gid=1385640257"
