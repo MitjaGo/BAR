@@ -83,6 +83,12 @@ def convert_df_to_csv_download(df):
 # -------------------------------
 # MAIN PHOBS EXPORTER
 # -------------------------------
+
+.stButton>button{
+    color: #11A27B;
+}
+
+
 st.markdown("#### BAR Export.csv Generator")
 
 if st.button("🔄 Osveži podatke"):
