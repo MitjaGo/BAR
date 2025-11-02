@@ -1,7 +1,17 @@
 # -------------------------------
+# EMBED GOOGLE SHEET
+# -------------------------------
+st.markdown("### 📊 Linked Google Sheet (PHOBS Master Data)")
+gsheet_url = "https://docs.google.com/spreadsheets/d/15HJ7wxyUmo-gcl5_y1M9gl4Ti-JSsYEJZCjoI76s-Xk/edit#gid=1385640257"
+
+st.components.v1.iframe(
+    gsheet_url,
+    height=550,
+)
+
+# -------------------------------
 # BUTTON TO OPEN GOOGLE SHEET IN NEW TAB
 # -------------------------------
-gsheet_url = "https://docs.google.com/spreadsheets/d/15HJ7wxyUmo-gcl5_y1M9gl4Ti-JSsYEJZCjoI76s-Xk/edit#gid=1385640257"
 st.markdown(
     f"""
 <div style="margin:10px 0;">
@@ -21,7 +31,30 @@ st.markdown(
 )
 
 # -------------------------------
-# HOTEL CSV DOWNLOAD BUTTONS (BLUE)
+# CUSTOM CSS FOR DOWNLOAD BUTTONS
+# -------------------------------
+st.markdown(
+    """
+    <style>
+    .custom-download button {
+        background-color: #5392ca !important;
+        color: white !important;
+        border-radius: 6px !important;
+        padding: 8px 14px !important;
+        font-weight: 600 !important;
+        transition: 0.3s !important;
+        width: 100% !important;
+    }
+    .custom-download button:hover {
+        background-color: #417fb4 !important;
+    }
+    </style>
+    """,
+    unsafe_allow_html=True
+)
+
+# -------------------------------
+# HOTEL CSV DOWNLOAD BUTTONS
 # -------------------------------
 col_count = 3
 cols = st.columns(col_count)
@@ -38,26 +71,27 @@ for idx, row in master_df.iterrows():
         df = prepare_phobs_csv(df, hotel_id, los_code)
         csv_data = convert_df_to_csv_download(df)
 
-        # Place download button inside column
+        # Wrap download button in div for custom CSS
         with cols[idx % col_count]:
+            st.markdown('<div class="custom-download">', unsafe_allow_html=True)
             st.download_button(
                 label=f"📥 {hotel_name}.csv",
                 data=csv_data,
                 file_name=f"{hotel_name}-Phobs.csv",
                 mime="text/csv",
-                key=f"download_{idx}",
-                help="Download CSV for this hotel",
-                # custom styling via HTML wrapper
-                css_class="custom-download"
+                key=f"download_{idx}"
             )
+            st.markdown('</div>', unsafe_allow_html=True)
+
     except Exception as e:
         failed.append((hotel_name, str(e)))
 
-# Show failed hotel loads
+# Show any failed loads
 if failed:
     st.warning("⚠️ Some hotels failed to load:")
     for h, e in failed:
         st.text(f"{h}: {e}")
+
 
 
 
