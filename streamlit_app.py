@@ -1,4 +1,5 @@
 # streamlit_app.py
+
 import os
 import pandas as pd
 import urllib.parse
@@ -37,7 +38,7 @@ if not st.session_state.authenticated:
     st.stop()
 
 # -------------------------------
-# HEADER & EMBEDDED SHEET
+# HEADER
 # -------------------------------
 st.markdown(
     """
@@ -50,43 +51,73 @@ st.markdown(
     unsafe_allow_html=True
 )
 
+# -------------------------------
+# EMBED GOOGLE SHEET
+# -------------------------------
+gsheet_id = "15HJ7wxyUmo-gcl5_y1M9gl4Ti-JSsYEJZCjoI76s-Xk"
+gsheet_url = f"https://docs.google.com/spreadsheets/d/{gsheet_id}/edit#gid=1385640257"
+
 st.markdown("### 📊 Linked Google Sheet (PHOBS Master Data)")
-st.components.v1.iframe(
-    "https://docs.google.com/spreadsheets/d/15HJ7wxyUmo-gcl5_y1M9gl4Ti-JSsYEJZCjoI76s-Xk/edit?gid=1385640257",
-    height=550,
+st.components.v1.iframe(gsheet_url, height=550)
+
+# -------------------------------
+# BUTTON TO OPEN GOOGLE SHEET IN NEW TAB
+# -------------------------------
+st.markdown(
+    f"""
+<div style="margin:10px 0;">
+    <a href="{gsheet_url}" target="_blank" style="
+        background-color:#5392ca;
+        color:white;
+        padding:8px 14px;
+        border-radius:6px;
+        text-decoration:none;
+        font-weight:600;
+        display:inline-block;
+        transition:0.3s;
+    ">📂 Open Google Sheet in new tab</a>
+</div>
+""",
+    unsafe_allow_html=True,
 )
 
 # -------------------------------
-# CUSTOM CSS (COLORS)
+# CUSTOM CSS FOR DOWNLOAD BUTTONS (FULLY RESPONSIVE)
 # -------------------------------
 st.markdown(
     """
 <style>
-/* Base button styling */
-div[data-testid="stButton"] > button:first-child {
-    border-radius: 8px;
-    font-weight: 600;
-    padding: 0.6em 1.2em;
-    border: none;
+.button-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;  /* space between buttons */
+    margin-bottom: 20px;
 }
-/* Orange Reload button */
-div[data-testid="stButton"] > button[kind="primary"] {
-    background-color: #f39c12 !important;
+.button-item {
+    flex: 1 1 calc(33.33% - 12px); /* 3 per row default */
+    min-width: 200px;
+}
+@media (max-width: 992px) { /* medium screens: 2 per row */
+    .button-item {
+        flex: 1 1 calc(50% - 12px);
+    }
+}
+@media (max-width: 576px) { /* small screens: 1 per row */
+    .button-item {
+        flex: 1 1 100%;
+    }
+}
+.custom-download button {
+    width: 100% !important;
+    background-color: #5392ca !important;
     color: white !important;
+    font-weight: 600 !important;
+    padding: 10px 16px !important;
+    border-radius: 8px !important;
+    transition: 0.3s !important;
 }
-/* Blue Adria download buttons */
-.custom-download a {
-    text-decoration: none;
-    background-color: #5392ca;
-    color: white;
-    padding: 8px 14px;
-    border-radius: 6px;
-    display: inline-block;
-    font-weight: 600;
-    transition: 0.3s;
-}
-.custom-download a:hover {
-    background-color: #417fb4;
+.custom-download button:hover {
+    background-color: #417fb4 !important;
 }
 </style>
 """,
@@ -102,11 +133,10 @@ def prepare_phobs_csv(df, hotel_id, los_code):
     df['BAR'] = df['BAR'].apply(lambda x: f"BAR{x}")
     df['Hotel_ID'] = hotel_id
     df['nicla'] = 0
-    df['Yield'] = f"YIELD{los_code}"
+    df['Yield'] = f"YIELD{los_code}" if pd.notna(los_code) else "YIELD"
     if 'Datum' not in df.columns:
         df['Datum'] = pd.Timestamp.today().strftime('%Y-%m-%d')
     return df[['Hotel_ID', 'Datum', 'nicla', 'BAR', 'Yield']]
-
 
 def convert_df_to_csv_download(df):
     return df.to_csv(index=False, header=False).encode("utf-8")
@@ -116,64 +146,20 @@ def convert_df_to_csv_download(df):
 # -------------------------------
 st.markdown("## ⚙️ PHOBS BAR Export .csv Generator")
 
-# Orange Reload button
+# Orange reload button
 if st.button("🔄 Reload Data", type="primary"):
     st.cache_data.clear()
     st.rerun()
 
-
 @st.cache_data(ttl=600)
 def load_master_data():
-    gsheet_id = "15HJ7wxyUmo-gcl5_y1M9gl4Ti-JSsYEJZCjoI76s-Xk"
-    master_url = (
-        f"https://docs.google.com/spreadsheets/d/{gsheet_id}/gviz/tq?tqx=out:csv&sheet=PHOBS"
-    )
+    master_url = f"https://docs.google.com/spreadsheets/d/{gsheet_id}/gviz/tq?tqx=out:csv&sheet=PHOBS"
     return pd.read_csv(master_url)
 
-
+# Load master sheet
 try:
     master_df = load_master_data()
     st.success(f"✅ Loaded master sheet — {len(master_df)} hotels found.")
-except Exception as e:
-    st.error(f"❌ Failed to load master sheet: {e}")
-    st.stop()
-
-st.caption(f"Last refreshed at: {datetime.now().strftime('%H:%M:%S')}")
-
-# -------------------------------
-# LOAD INDIVIDUAL HOTEL SHEETS
-# -------------------------------
-gsheet_id = "15HJ7wxyUmo-gcl5_y1M9gl4Ti-JSsYEJZCjoI76s-Xk"
-col_count = 3
-cols = st.columns(col_count)
-failed = []
-
-for idx, row in master_df.iterrows():
-    hotel_name = row.get("Hotel_Name", "")
-    hotel_id = row.get("Hotel_ID", "")
-    los_code = row.get("YIELD_Code", "")
-    try:
-        sname = urllib.parse.quote(hotel_name)
-        url = f"https://docs.google.com/spreadsheets/d/{gsheet_id}/gviz/tq?tqx=out:csv&sheet={sname}"
-        df = pd.read_csv(url)
-        df = prepare_phobs_csv(df, hotel_id, los_code)
-        csv_data = convert_df_to_csv_download(df)
-        b64 = base64.b64encode(csv_data).decode()
-        href = f'data:text/csv;base64,{b64}'
-        btn_html = f"""
-<div class='custom-download' style='margin:6px 0;'>
-  <a href="{href}" download="{hotel_name}-Phobs.csv">📥 {hotel_name}.csv</a>
-</div>
-"""
-        with cols[idx % col_count]:
-            st.markdown(btn_html, unsafe_allow_html=True)
-    except Exception as e:
-        failed.append((hotel_name, str(e)))
-
-if failed:
-    st.warning("⚠️ Some hotels failed to load:")
-    for h, e in failed:
-        st.text(f"{h}: {e}")
 except Exception as e:
     st.error(f"❌ Failed to load master sheet: {e}")
     st.stop()
@@ -191,6 +177,7 @@ for idx, row in master_df.iterrows():
     hotel_name = row.get("Hotel_Name", "").strip()
     hotel_id = row.get("Hotel_ID", "")
     los_code = row.get("YIELD_Code", "")
+    
     try:
         sname = urllib.parse.quote(hotel_name)
         url = f"https://docs.google.com/spreadsheets/d/{gsheet_id}/gviz/tq?tqx=out:csv&sheet={sname}"
@@ -198,7 +185,6 @@ for idx, row in master_df.iterrows():
         df = prepare_phobs_csv(df, hotel_id, los_code)
         csv_data = convert_df_to_csv_download(df)
 
-        # Each button in its flex item
         st.markdown('<div class="button-item custom-download">', unsafe_allow_html=True)
         st.download_button(
             label=f"📥 {hotel_name}.csv",
@@ -208,6 +194,7 @@ for idx, row in master_df.iterrows():
             key=f"download_{idx}"
         )
         st.markdown('</div>', unsafe_allow_html=True)
+
     except Exception as e:
         failed.append((hotel_name, str(e)))
 
@@ -218,6 +205,7 @@ if failed:
     st.warning("⚠️ Some hotels failed to load:")
     for h, e in failed:
         st.text(f"{h}: {e}")
+
 
 
 
