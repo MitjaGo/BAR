@@ -40,7 +40,7 @@ st.markdown(
         align-items: center;
         margin-bottom: 10px;
     ">
-        <h2 style="margin: 0;"><b>!EXPORT</b>4PHOBS</h2>
+        <h2 style="margin: 0;"><b>EXPORT</b>4PHOBS</h2>
         <img src="https://www.adria-ankaran.si//app/uploads/2025/10/logo-Adria.jpg" width="180" alt="Logo">
     </div>
     <hr style="border: 1px solid #ddd;">
@@ -88,24 +88,9 @@ if not st.session_state.authenticated:
 # Green welcome text
 st.markdown('✅ <span style="color:green;font-size:20px; font-weight:bold;">Dobrodošli! Uživajte v delu.</span>', unsafe_allow_html=True)
 
-# Add the rest of your app content below
-st.write("Tu dodajte glavno vsebino aplikacije.")
-
-
-
 # -------------------------------
 # MAIN APP (after login)
 # -------------------------------
-st.markdown(
-    """
-    <div style="display:flex;justify-content:space-between;align-items:center;">
-        <h2><b>EXPORT</b>4PHOBS</h2>
-        <img src="https://www.adria-ankaran.si//app/uploads/2025/10/logo-Adria.jpg" width="180" alt="">
-    </div>
-    <hr>
-    """,
-    unsafe_allow_html=True
-)
 
 st.markdown("#### BAR Urejevalnik")
 
