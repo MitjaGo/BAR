@@ -123,21 +123,21 @@ st.markdown(
 )
 
 # Google Sheet URL - new tab
-sheet_url = "https://docs.google.com/spreadsheets/d/Y15HJ7wxyUmo-gcl5_y1M9gl4Ti-JSsYEJZCjoI76s-Xk"
+sheet_url = "https://docs.google.com/spreadsheets/d/15HJ7wxyUmo-gcl5_y1M9gl4Ti-JSsYEJZCjoI76s-Xk/edit?gid=1385640257"
 
 # Use st.markdown with HTML to create a "button" that opens in a new tab
 st.markdown(f"""
     <a href="{sheet_url}" target="_blank">
         <button style="
-            background-color: #f6b221;
+            background-color: #1cb319;
             color: white;
-            padding: 10px 20px;
+            padding: 5px 30px;
             border-radius: 8px;
             border: none;
             font-size: 16px;
             cursor: pointer;
         ">
-            Open Google Sheet
+           Odpri v Google Sheet v novem oknu
         </button>
     </a>
 """, unsafe_allow_html=True)
