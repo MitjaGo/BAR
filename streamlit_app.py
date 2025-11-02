@@ -26,9 +26,6 @@ st.set_page_config(page_title="EXPORT4PHOBS", layout="wide")
 # PASSWORD LOGIN
 # -------------------------------
 
-import streamlit as st
-
-PASSWORD = "your_password_here"
 
 # Initialize session state
 if "authenticated" not in st.session_state:
