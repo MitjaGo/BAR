@@ -26,6 +26,16 @@ st.set_page_config(page_title="EXPORT4PHOBS", layout="wide")
 # PASSWORD LOGIN
 # -------------------------------
 
+st.markdown(
+    """
+    <div style="display:flex;justify-content:space-between;align-items:center;">
+        <h2><b>EXPORT</b>4PHOBS</h2>
+        <img src="https://www.adria-ankaran.si//app/uploads/2025/10/logo-Adria.jpg" width="180" alt="">
+    </div>
+    <hr>
+    """,
+    unsafe_allow_html=True
+)
 
 # Initialize session state
 if "authenticated" not in st.session_state:
