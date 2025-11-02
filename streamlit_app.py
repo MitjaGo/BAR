@@ -64,7 +64,7 @@ if not st.session_state.authenticated:
  
 # App content for authenticated users
 # Green text
-st.markdown('✅ <span style="color:green;">Dobrodošel! Uživaj v delu.</span>', unsafe_allow_html=True)
+st.markdown('✅ <span style="color:green;font-size:20px; font-weight:bold; ">Dobrodošli! Uživajte v delu.</span>', unsafe_allow_html=True)
 
 # Add the rest of your app below
 
