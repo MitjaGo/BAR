@@ -91,7 +91,7 @@ if not st.session_state.authenticated:
 
 
 # BAR Urejevalnik)
-st.markdown('✅ <span style="color:green;font-size:25px; font-weight:bold;">BAR Urejevalnik!</span>', unsafe_allow_html=True)
+st.markdown('<span style="color:green;font-size:30px; font-weight:bold;">BAR Urejevalnik!</span>', unsafe_allow_html=True)
 
 
 #Sheet URL - new tab
@@ -195,7 +195,7 @@ st.markdown(
 # -------------------------------
 
 
-st.markdown("##### BAR Export.csv Generator")
+st.markdown('<span style="color:green;font-size:25px; font-weight:bold;">BAR Export.csv Generator</span>', unsafe_allow_html=True)
 
 if st.button("🔄 Osveži podatke"):
     st.cache_data.clear()
