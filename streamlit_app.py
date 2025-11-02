@@ -57,7 +57,7 @@ st.markdown(
 )
 
 # Embed Google Sheet
-st.markdown("### 📊 Linked Google Sheet (PHOBS Master Data)")
+st.markdown("# (BAR Urejevalnik)")
 st.components.v1.iframe(
     "https://docs.google.com/spreadsheets/d/15HJ7wxyUmo-gcl5_y1M9gl4Ti-JSsYEJZCjoI76s-Xk/edit?gid=1385640257",
     height=550,
@@ -83,9 +83,9 @@ def convert_df_to_csv_download(df):
 # -------------------------------
 # MAIN PHOBS EXPORTER
 # -------------------------------
-st.markdown("## ⚙️ PHOBS BAR Export .csv Generator")
+st.markdown("# BAR Export.csv Generator")
 
-if st.button("🔄 Reload Data"):
+if st.button("🔄 Osveži podatke"):
     st.cache_data.clear()
     st.rerun()
 
