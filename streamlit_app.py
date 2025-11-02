@@ -42,6 +42,26 @@ if not st.session_state.authenticated:
             st.error("❌ Incorrect password. Please try again.")
     st.stop()
 
+st.markdown(
+    """
+    <style>
+    .stButton>button {
+        background-color: #1cb319;
+        color: white;
+        cursor: pointer;
+    }
+
+    /* Hover effect */
+   .stButton>button:hover {
+        background-color: #4fb34d;
+    }
+    </style>
+    """,
+    unsafe_allow_html=True
+)
+
+
+
 # -------------------------------
 # MAIN APP (after login)
 # -------------------------------
