@@ -29,6 +29,28 @@ st.set_page_config(page_title="EXPORT4PHOBS", layout="wide")
 import streamlit as st
 
 # Initialize session state
+import streamlit as st
+
+PASSWORD = "your_password_here"
+
+# Header with logo (always visible)
+st.markdown(
+    """
+    <div style="
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 10px;
+    ">
+        <h2 style="margin: 0;"><b>EXPORT</b>4PHOBS</h2>
+        <img src="https://www.adria-ankaran.si//app/uploads/2025/10/logo-Adria.jpg" width="180" alt="Logo">
+    </div>
+    <hr style="border: 1px solid #ddd;">
+    """,
+    unsafe_allow_html=True
+)
+
+# Initialize session state
 if "authenticated" not in st.session_state:
     st.session_state.authenticated = False
 if "login_attempted" not in st.session_state:
@@ -59,34 +81,18 @@ if not st.session_state.authenticated:
         if password == PASSWORD:
             st.session_state.authenticated = True
         else:
-            st.error("❌ Geslo ni pravilno!!!")
+            st.error("❌ Incorrect password. Please try again.")
 
     st.stop()  # stop here if not authenticated
 
 # App content for authenticated users
-
-# Header with logo
-st.markdown(
-    """
-    <div style="
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-bottom: 10px;
-    ">
-        <h2 style="margin: 0;"><b>EXPORT</b>4PHOBS</h2>
-        <img src="https://www.adria-ankaran.si//app/uploads/2025/10/logo-Adria.jpg" width="180" alt="Logo">
-    </div>
-    <hr style="border: 1px solid #ddd;">
-    """,
-    unsafe_allow_html=True
-)
 
 # Green welcome text
 st.markdown('✅ <span style="color:green;font-size:20px; font-weight:bold;">Dobrodošli! Uživajte v delu.</span>', unsafe_allow_html=True)
 
 # Add the rest of your app content below
 st.write("Tu dodajte glavno vsebino aplikacije.")
+
 
 
 # -------------------------------
