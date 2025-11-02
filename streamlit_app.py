@@ -80,11 +80,20 @@ st.markdown(
 )
 
 # -------------------------------
-# CUSTOM CSS FOR DOWNLOAD BUTTONS
+# CUSTOM CSS FOR DOWNLOAD BUTTONS (RESPONSIVE)
 # -------------------------------
 st.markdown(
     """
 <style>
+.download-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+.download-item {
+    flex: 1 1 30%; /* default ~3 items per row */
+    min-width: 220px; /* ensures button isn't too small on mobile */
+}
 .custom-download button {
     background-color: #5392ca !important;
     color: white !important;
@@ -146,11 +155,10 @@ except Exception as e:
 st.caption(f"Last refreshed at: {datetime.now().strftime('%H:%M:%S')}")
 
 # -------------------------------
-# LOAD INDIVIDUAL HOTEL SHEETS
+# HOTEL CSV DOWNLOAD BUTTONS (RESPONSIVE FLEXBOX)
 # -------------------------------
-gsheet_id = "15HJ7wxyUmo-gcl5_y1M9gl4Ti-JSsYEJZCjoI76s-Xk"
-col_count = 3
-cols = st.columns(col_count)
+st.markdown('<div class="download-container">', unsafe_allow_html=True)
+
 failed = []
 
 for idx, row in master_df.iterrows():
@@ -164,24 +172,27 @@ for idx, row in master_df.iterrows():
         df = prepare_phobs_csv(df, hotel_id, los_code)
         csv_data = convert_df_to_csv_download(df)
 
-        with cols[idx % col_count]:
-            st.markdown('<div class="custom-download">', unsafe_allow_html=True)
-            st.download_button(
-                label=f"📥 {hotel_name}.csv",
-                data=csv_data,
-                file_name=f"{hotel_name}-Phobs.csv",
-                mime="text/csv",
-                key=f"download_{idx}"
-            )
-            st.markdown('</div>', unsafe_allow_html=True)
+        st.markdown('<div class="download-item custom-download">', unsafe_allow_html=True)
+        st.download_button(
+            label=f"📥 {hotel_name}.csv",
+            data=csv_data,
+            file_name=f"{hotel_name}-Phobs.csv",
+            mime="text/csv",
+            key=f"download_{idx}"
+        )
+        st.markdown('</div>', unsafe_allow_html=True)
 
     except Exception as e:
         failed.append((hotel_name, str(e)))
 
+st.markdown('</div>', unsafe_allow_html=True)
+
+# Show any failed loads
 if failed:
     st.warning("⚠️ Some hotels failed to load:")
     for h, e in failed:
         st.text(f"{h}: {e}")
+
 
 
 
