@@ -87,37 +87,34 @@ st.markdown(
 st.markdown(
     """
 <style>
-.download-container {
+.button-row {
     display: flex;
     flex-wrap: wrap;
-    gap: 12px;
+    gap: 12px;  /* space between buttons */
     margin-bottom: 20px;
 }
-/* Default: 3 columns */
-.download-item {
-    flex: 1 1 calc(33.33% - 12px);
-    min-width: 220px;
+.button-item {
+    flex: 1 1 calc(33.33% - 12px); /* 3 per row by default */
+    min-width: 200px;
 }
-/* Medium screens: 2 columns */
-@media (max-width: 992px) {
-    .download-item {
+@media (max-width: 992px) { /* medium screens: 2 per row */
+    .button-item {
         flex: 1 1 calc(50% - 12px);
     }
 }
-/* Small screens: 1 column */
-@media (max-width: 576px) {
-    .download-item {
+@media (max-width: 576px) { /* small screens: 1 per row */
+    .button-item {
         flex: 1 1 100%;
     }
 }
 .custom-download button {
+    width: 100% !important;
     background-color: #5392ca !important;
     color: white !important;
-    border-radius: 6px !important;
-    padding: 8px 14px !important;
     font-weight: 600 !important;
+    padding: 10px 16px !important;
+    border-radius: 8px !important;
     transition: 0.3s !important;
-    width: 100% !important;
 }
 .custom-download button:hover {
     background-color: #417fb4 !important;
@@ -172,7 +169,7 @@ st.caption(f"Last refreshed at: {datetime.now().strftime('%H:%M:%S')}")
 # -------------------------------
 # HOTEL CSV DOWNLOAD BUTTONS (RESPONSIVE FLEXBOX)
 # -------------------------------
-st.markdown('<div class="download-container">', unsafe_allow_html=True)
+st.markdown('<div class="button-row">', unsafe_allow_html=True)
 
 failed = []
 
@@ -187,7 +184,8 @@ for idx, row in master_df.iterrows():
         df = prepare_phobs_csv(df, hotel_id, los_code)
         csv_data = convert_df_to_csv_download(df)
 
-        st.markdown('<div class="download-item custom-download">', unsafe_allow_html=True)
+        # Each button in its flex item
+        st.markdown('<div class="button-item custom-download">', unsafe_allow_html=True)
         st.download_button(
             label=f"📥 {hotel_name}.csv",
             data=csv_data,
@@ -196,7 +194,6 @@ for idx, row in master_df.iterrows():
             key=f"download_{idx}"
         )
         st.markdown('</div>', unsafe_allow_html=True)
-
     except Exception as e:
         failed.append((hotel_name, str(e)))
 
@@ -207,6 +204,7 @@ if failed:
     st.warning("⚠️ Some hotels failed to load:")
     for h, e in failed:
         st.text(f"{h}: {e}")
+
 
 
 
