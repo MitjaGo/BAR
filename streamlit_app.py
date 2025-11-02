@@ -84,9 +84,17 @@ def convert_df_to_csv_download(df):
 # MAIN PHOBS EXPORTER
 # -------------------------------
 
-.stButton>button{
-    color: #11A27B;
-}
+st.markdown(
+    """
+    <style>
+    .stButton>button {
+        background-color: #4CAF50;
+        color: white;
+    }
+    </style>
+    """,
+    unsafe_allow_html=True
+)
 
 
 st.markdown("#### BAR Export.csv Generator")
