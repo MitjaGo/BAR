@@ -56,6 +56,36 @@ st.markdown(
     unsafe_allow_html=True
 )
 
+#Sheet URL - new tab
+sheet_url = "https://docs.google.com/spreadsheets/d/15HJ7wxyUmo-gcl5_y1M9gl4Ti-JSsYEJZCjoI76s-Xk/edit?gid=1385640257"
+
+st.markdown("""
+    <style>
+    .google-sheet-button {
+        background-color: #1cb319;
+        color: white;
+        padding: 0px 40px;
+        border-radius: 8px;
+        border: none;
+        font-size: 16px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+    }
+
+    .google-sheet-button:hover {
+        background-color: #4fb34d;
+    }
+    </style>
+""", unsafe_allow_html=True)
+
+st.markdown(f"""
+    <a href="{sheet_url}" target="_blank">
+        <button class="google-sheet-button">
+           Odpri v Google Sheet v novem oknu
+        </button>
+    </a>
+""", unsafe_allow_html=True)
+
 # Embed Google Sheet
 st.markdown("#### BAR Urejevalnik")
 st.components.v1.iframe(
@@ -81,7 +111,7 @@ def convert_df_to_csv_download(df):
     return df.to_csv(index=False, header=False).encode("utf-8")
 
 # -------------------------------
-# MAIN PHOBS EXPORTER
+# MAIN PHOBS CSS COLORS
 # -------------------------------
 
 st.markdown(
@@ -122,37 +152,9 @@ st.markdown(
     unsafe_allow_html=True
 )
 
-# Google Sheet URL - new tab
-
-# Google Sheet URL
-sheet_url = "https://docs.google.com/spreadsheets/d/15HJ7wxyUmo-gcl5_y1M9gl4Ti-JSsYEJZCjoI76s-Xk/edit?gid=1385640257"
-
-st.markdown("""
-    <style>
-    .google-sheet-button {
-        background-color: #1cb319;
-        color: white;
-        padding: 0px 40px;
-        border-radius: 8px;
-        border: none;
-        font-size: 16px;
-        cursor: pointer;
-        transition: background-color 0.3s;
-    }
-
-    .google-sheet-button:hover {
-        background-color: #4fb34d;
-    }
-    </style>
-""", unsafe_allow_html=True)
-
-st.markdown(f"""
-    <a href="{sheet_url}" target="_blank">
-        <button class="google-sheet-button">
-           Odpri v Google Sheet v novem oknu
-        </button>
-    </a>
-""", unsafe_allow_html=True)
+# -------------------------------
+# MAIN PHOBS EXPORTER
+# -------------------------------
 
 
 st.markdown("#### BAR Export.csv Generator")
