@@ -123,23 +123,27 @@ st.markdown(
 )
 
 # Google Sheet URL - new tab
+
+# Google Sheet URL
 sheet_url = "https://docs.google.com/spreadsheets/d/15HJ7wxyUmo-gcl5_y1M9gl4Ti-JSsYEJZCjoI76s-Xk/edit?gid=1385640257"
 
-st.markdown(f"""
-    <a href="{sheet_url}" target="_blank">
-        <button style="
-            background-color: #1cb319;
-            color: white;
-            padding: 5px 30px;
-            border-radius: 8px;
-            border: none;
-            font-size: 16px;
-            cursor: pointer;
-            transition: background-color 0.3s;
-        " onmouseover="this.style.backgroundColor='#4184bf'" onmouseout="this.style.backgroundColor='#1cb319'">
-           Odpri v Google Sheet v novem oknu
-        </button>
-    </a>
+st.markdown("""
+    <style>
+    .google-sheet-button {
+        background-color: #1cb319;
+        color: white;
+        padding: 5px 30px;
+        border-radius: 8px;
+        border: none;
+        font-size: 16px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+    }
+
+    .google-sheet-button:hover {
+        background-color: #4184bf;
+    }
+    </style>
 """, unsafe_allow_html=True)
 
 
