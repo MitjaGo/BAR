@@ -11,7 +11,7 @@ import base64
 from datetime import datetime
 from dotenv import load_dotenv
 import streamlit as st
-from streamlit_extras.stylable_container import stylable_container
+
 # -------------------------------
 # ENVIRONMENT & PASSWORD SETUP
 # -------------------------------
@@ -44,15 +44,19 @@ if not st.session_state.authenticated:
 # -------------------------------
 # MAIN APP (after login)
 # -------------------------------
-with stylable_container(
-    key="button",
-    css_styles="""
-        button { 
-            background-color: #0000ff; /* the background colour of the button will be blue */
-            color: white; /* the letters in the button will be white */
-        }
+# Main App (after login)
+st.markdown(
     """
-):
+    <style>
+    button { 
+        background-color: #0000ff;
+        color: white;
+    }
+    </style>
+    """,
+    unsafe_allow_html=True
+)
+
 
     st.markdown(
         """
