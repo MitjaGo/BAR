@@ -43,18 +43,6 @@ if not st.session_state.authenticated:
 # MAIN APP (after login)
 # -------------------------------
 # Main App (after login)
-st.markdown(
-    """
-    <style>
-    button { 
-        background-color: #0000ff;
-        color: white;
-    }
-    </style>
-    """,
-    unsafe_allow_html=True
-)
-
 
     st.markdown(
         """
