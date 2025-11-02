@@ -193,8 +193,8 @@ st.markdown(
 # -------------------------------
 # MAIN PHOBS EXPORTER
 # -------------------------------
+st.markdown('<hr style="border: 1px solid #ddd;">', unsafe_allow_html=True)
 
-<hr style="border: 1px solid #ddd;">
 st.markdown('<span style="color:green;font-size:25px; font-weight:bold;">BAR Export.csv Generator</span>', unsafe_allow_html=True)
 
 if st.button("🔄 Osveži podatke"):
