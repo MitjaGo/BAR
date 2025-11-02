@@ -12,7 +12,7 @@ import streamlit as st
 # ENVIRONMENT & PASSWORD SETUP
 # -------------------------------
 load_dotenv()
-PASSWORD = os.getenv("MY", "test")  # fallback if not set
+PASSWORD = os.getenv("MY")  # fallback if not set
 
 # -------------------------------
 # PAGE CONFIG
