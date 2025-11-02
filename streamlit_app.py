@@ -132,7 +132,7 @@ st.markdown("""
     .google-sheet-button {
         background-color: #1cb319;
         color: white;
-        padding: 5px 30px;
+        padding: 0px 40px;
         border-radius: 8px;
         border: none;
         font-size: 16px;
@@ -141,7 +141,7 @@ st.markdown("""
     }
 
     .google-sheet-button:hover {
-        background-color: #4184bf;
+        background-color: #4fb34d;
     }
     </style>
 """, unsafe_allow_html=True)
