@@ -62,9 +62,11 @@ if not st.session_state.authenticated:
 
     st.stop()  # stop here if not authenticated
  
-    # App content for authenticated users
-    st.markdown('✅ <span style="color:green;">Dobrodošel! Uživaj v delu.</span>', unsafe_allow_html=True)
-    # Add the rest of your app below
+# App content for authenticated users
+# Green text
+st.markdown('✅ <span style="color:green;">Dobrodošel! Uživaj v delu.</span>', unsafe_allow_html=True)
+
+# Add the rest of your app below
 
 # -------------------------------
 # MAIN APP (after login)
