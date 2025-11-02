@@ -61,6 +61,8 @@ sheet_url = "https://docs.google.com/spreadsheets/d/15HJ7wxyUmo-gcl5_y1M9gl4Ti-J
 
 st.markdown("""
     <style>
+    .right-button {
+        float: right;  /* aligns the button to the right */
     .google-sheet-button {
         background-color: #1cb319;
         color: white;
