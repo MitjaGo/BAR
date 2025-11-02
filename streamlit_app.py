@@ -2,6 +2,8 @@
 
 # streamlit_app.py
 
+pip install streamlit-extras
+
 import os
 import pandas as pd
 import urllib.parse
