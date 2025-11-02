@@ -67,7 +67,7 @@ st.markdown("""
         float: right;  /* Align button to the right */
         background-color: #1cb319;
         color: white;
-        padding: 0px 40px;
+        padding: 0px 0px;
         border-radius: 8px;
         border: none;
         font-size: 16px;
