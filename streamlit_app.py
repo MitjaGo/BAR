@@ -29,11 +29,11 @@ if "authenticated" not in st.session_state:
     st.session_state.authenticated = False
 
 if not st.session_state.authenticated:
-    st.markdown("## 🔒 Please log in to access the app")
+    st.markdown("## 🔒 Za dostop do aplikacije se prijavi")
 
-    password = st.text_input("Enter Password", type="password")
+    password = st.text_input("Vnesi geslo", type="password")
 
-    if st.button("Unlock App"):
+    if st.button("Odkleni Aplikacijo"):
         if password == PASSWORD:
             st.session_state.authenticated = True
             st.success("✅ Access Granted!")
@@ -57,7 +57,7 @@ st.markdown(
 )
 
 # Embed Google Sheet
-st.markdown("# (BAR Urejevalnik)")
+st.markdown("#### BAR Urejevalnik")
 st.components.v1.iframe(
     "https://docs.google.com/spreadsheets/d/15HJ7wxyUmo-gcl5_y1M9gl4Ti-JSsYEJZCjoI76s-Xk/edit?gid=1385640257",
     height=550,
@@ -83,7 +83,7 @@ def convert_df_to_csv_download(df):
 # -------------------------------
 # MAIN PHOBS EXPORTER
 # -------------------------------
-st.markdown("# BAR Export.csv Generator")
+st.markdown("#### BAR Export.csv Generator")
 
 if st.button("🔄 Osveži podatke"):
     st.cache_data.clear()
