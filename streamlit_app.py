@@ -37,79 +37,60 @@ if not st.session_state.authenticated:
     st.stop()
 
 # -------------------------------
-# HEADER
+# HEADER & EMBEDDED SHEET
 # -------------------------------
 st.markdown(
-"""
+    """
 <div style="display:flex;justify-content:space-between;align-items:center;">
   <h2><b>EXPORT</b>4PHOBS</h2>
   <img src="https://www.adria-ankaran.si//app/uploads/2025/10/logo-Adria.jpg" width="180" alt="">
 </div>
 <hr>
-""", unsafe_allow_html=True
+""",
+    unsafe_allow_html=True
+)
+
+st.markdown("### 📊 Linked Google Sheet (PHOBS Master Data)")
+st.components.v1.iframe(
+    "https://docs.google.com/spreadsheets/d/15HJ7wxyUmo-gcl5_y1M9gl4Ti-JSsYEJZCjoI76s-Xk/edit?gid=1385640257",
+    height=550,
 )
 
 # -------------------------------
-# GOOGLE SHEET BUTTON (Open in New Tab)
-# -------------------------------
-gsheet_link = "https://docs.google.com/spreadsheets/d/15HJ7wxyUmo-gcl5_y1M9gl4Ti-JSsYEJZCjoI76s-Xk/edit?usp=sharing"
-st.markdown(
-    f"""
-<div style="margin-bottom:20px;">
-    <a href="{gsheet_link}" target="_blank" 
-       style="background-color:#2ecc71;color:white;padding:12px 20px;
-              text-decoration:none;border-radius:8px;font-weight:600;">
-        📄 Open Google Sheet (Editable)
-    </a>
-</div>
-""", unsafe_allow_html=True
-)
-
-# -------------------------------
-# CUSTOM CSS FOR BUTTONS
+# CUSTOM CSS (COLORS)
 # -------------------------------
 st.markdown(
-"""
+    """
 <style>
-/* Orange Reload button */
+/* Base button styling */
 div[data-testid="stButton"] > button:first-child {
     border-radius: 8px;
     font-weight: 600;
     padding: 0.6em 1.2em;
     border: none;
+}
+/* Orange Reload button */
+div[data-testid="stButton"] > button[kind="primary"] {
     background-color: #f39c12 !important;
     color: white !important;
 }
-
-/* Responsive Blue download buttons */
-.button-grid {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 12px;
-}
-.button-item {
-    flex: 1 1 250px;  /* min width 250px, grows */
-}
+/* Blue Adria download buttons */
 .custom-download a {
     text-decoration: none;
     background-color: #5392ca;
     color: white;
-    padding: 10px 16px;
-    border-radius: 8px;
-    display: block;
-    width: 100%;
-    text-align: center;
+    padding: 8px 14px;
+    border-radius: 6px;
+    display: inline-block;
     font-weight: 600;
-    transition: all 0.25s ease;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    transition: 0.3s;
 }
 .custom-download a:hover {
     background-color: #417fb4;
-    transform: translateY(-2px);
-    box-shadow: 0 4px 8px rgba(0,0,0,0.15);
 }
 </style>
-""", unsafe_allow_html=True
+""",
+    unsafe_allow_html=True
 )
 
 # -------------------------------
@@ -126,25 +107,29 @@ def prepare_phobs_csv(df, hotel_id, los_code):
         df['Datum'] = pd.Timestamp.today().strftime('%Y-%m-%d')
     return df[['Hotel_ID', 'Datum', 'nicla', 'BAR', 'Yield']]
 
+
 def convert_df_to_csv_download(df):
     return df.to_csv(index=False, header=False).encode("utf-8")
 
 # -------------------------------
-# RELOAD BUTTON
+# MAIN EXPORT SECTION
 # -------------------------------
 st.markdown("## ⚙️ PHOBS BAR Export .csv Generator")
-if st.button("🔄 Reload Data"):
-    st.cache_data.clear()
-    st.experimental_rerun()
 
-# -------------------------------
-# LOAD MASTER DATA
-# -------------------------------
+# Orange Reload button
+if st.button("🔄 Reload Data", type="primary"):
+    st.cache_data.clear()
+    st.rerun()
+
+
 @st.cache_data(ttl=600)
 def load_master_data():
     gsheet_id = "15HJ7wxyUmo-gcl5_y1M9gl4Ti-JSsYEJZCjoI76s-Xk"
-    master_url = f"https://docs.google.com/spreadsheets/d/{gsheet_id}/gviz/tq?tqx=out:csv&sheet=PHOBS"
+    master_url = (
+        f"https://docs.google.com/spreadsheets/d/{gsheet_id}/gviz/tq?tqx=out:csv&sheet=PHOBS"
+    )
     return pd.read_csv(master_url)
+
 
 try:
     master_df = load_master_data()
@@ -156,10 +141,11 @@ except Exception as e:
 st.caption(f"Last refreshed at: {datetime.now().strftime('%H:%M:%S')}")
 
 # -------------------------------
-# RESPONSIVE DOWNLOAD BUTTON GRID
+# LOAD INDIVIDUAL HOTEL SHEETS
 # -------------------------------
 gsheet_id = "15HJ7wxyUmo-gcl5_y1M9gl4Ti-JSsYEJZCjoI76s-Xk"
-buttons_html = ""
+col_count = 3
+cols = st.columns(col_count)
 failed = []
 
 for idx, row in master_df.iterrows():
@@ -174,25 +160,21 @@ for idx, row in master_df.iterrows():
         csv_data = convert_df_to_csv_download(df)
         b64 = base64.b64encode(csv_data).decode()
         href = f'data:text/csv;base64,{b64}'
-
-        buttons_html += f"""
-        <div class='button-item custom-download'>
-            <a href="{href}" download="{hotel_name}-Phobs.csv">📥 {hotel_name}.csv</a>
-        </div>
-        """
+        btn_html = f"""
+<div class='custom-download' style='margin:6px 0;'>
+  <a href="{href}" download="{hotel_name}-Phobs.csv">📥 {hotel_name}.csv</a>
+</div>
+"""
+        with cols[idx % col_count]:
+            st.markdown(btn_html, unsafe_allow_html=True)
     except Exception as e:
         failed.append((hotel_name, str(e)))
-
-st.markdown(f"""
-<div class="button-grid">
-{buttons_html}
-</div>
-""", unsafe_allow_html=True)
 
 if failed:
     st.warning("⚠️ Some hotels failed to load:")
     for h, e in failed:
         st.text(f"{h}: {e}")
+
 
 
 
