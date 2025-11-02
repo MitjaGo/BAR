@@ -122,13 +122,25 @@ st.markdown(
     unsafe_allow_html=True
 )
 
-# Example download button
-st.download_button(
-    label="Download File",
-    data="Hello, world!",
-    file_name="example.txt",
-    mime="text/plain"
-)
+# Google Sheet URL - new tab
+sheet_url = "https://docs.google.com/spreadsheets/d/Y15HJ7wxyUmo-gcl5_y1M9gl4Ti-JSsYEJZCjoI76s-Xk"
+
+# Use st.markdown with HTML to create a "button" that opens in a new tab
+st.markdown(f"""
+    <a href="{sheet_url}" target="_blank">
+        <button style="
+            background-color: #f6b221;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 8px;
+            border: none;
+            font-size: 16px;
+            cursor: pointer;
+        ">
+            Open Google Sheet
+        </button>
+    </a>
+""", unsafe_allow_html=True)
 
 
 st.markdown("#### BAR Export.csv Generator")
