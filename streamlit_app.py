@@ -95,7 +95,7 @@ st.markdown('<span style="color:green;font-size:30px; font-weight:bold;">BAR Ure
 
 
 #Sheet URL - new tab
-sheet_url = "https://docs.google.com/spreadsheets/d/15HJ7wxyUmo-gcl5_y1M9gl4Ti-JSsYEJZCjoI76s-Xk/edit?gid=1385640257"
+sheet_url = "https://docs.google.com/spreadsheets/d/15HJ7wxyUmo-gcl5_y1M9gl4Ti-JSsYEJZCjoI76s-Xk/edit?rm=demo"
 
 st.markdown("""
     <style>
@@ -127,7 +127,7 @@ st.markdown(f"""
 
 # Embed Google Sheet
 st.components.v1.iframe(
-    "https://docs.google.com/spreadsheets/d/15HJ7wxyUmo-gcl5_y1M9gl4Ti-JSsYEJZCjoI76s-Xk/edit?gid=1385640257",
+    "https://docs.google.com/spreadsheets/d/15HJ7wxyUmo-gcl5_y1M9gl4Ti-JSsYEJZCjoI76s-Xk/edit?rm=demo",
     height=550,
 )
 
