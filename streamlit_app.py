@@ -63,7 +63,7 @@ if not st.session_state.authenticated:
     st.stop()  # stop here if not authenticated
  
     # App content for authenticated users
-    st.markdown("######  ✅ Dobrodošlel! Uživaj v delu.")
+    st.write"✅ Dobrodošlel! Uživaj v delu."
     # Add the rest of your app below
 
 # -------------------------------
