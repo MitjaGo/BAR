@@ -79,7 +79,7 @@ if not st.session_state.authenticated:
         if password == PASSWORD:
             st.session_state.authenticated = True
         else:
-            st.error("❌ Geslo ni pravilno. Prosim vnesite ga ponovno.")
+            st.error("❌ Geslo ni pravilno. Prosim za ponoven vnos.")
 
     st.stop()  # stop here if not authenticated
 
