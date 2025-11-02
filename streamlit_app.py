@@ -169,6 +169,9 @@ st.caption(f"Last refreshed at: {datetime.now().strftime('%H:%M:%S')}")
 # -------------------------------
 # HOTEL CSV DOWNLOAD BUTTONS (RESPONSIVE FLEXBOX)
 # -------------------------------
+# -------------------------------
+# HOTEL CSV DOWNLOAD BUTTONS (RESPONSIVE FLEXBOX)
+# -------------------------------
 st.markdown('<div class="button-row">', unsafe_allow_html=True)
 
 failed = []
@@ -184,16 +187,24 @@ for idx, row in master_df.iterrows():
         df = pd.read_csv(url)
         df = prepare_phobs_csv(df, hotel_id, los_code)
         csv_data = convert_df_to_csv_download(df)
+        b64 = base64.b64encode(csv_data).decode()
 
-        st.markdown('<div class="button-item custom-download">', unsafe_allow_html=True)
-        st.download_button(
-            label=f"📥 {hotel_name}.csv",
-            data=csv_data,
-            file_name=f"{hotel_name}-Phobs.csv",
-            mime="text/csv",
-            key=f"download_{idx}"
-        )
-        st.markdown('</div>', unsafe_allow_html=True)
+        # Create a proper download link
+        href = f'data:text/csv;base64,{b64}'
+        btn_html = f"""
+        <div class='button-item'>
+            <a href="{href}" download="{hotel_name}-Phobs.csv" class="custom-download">
+                📥 {hotel_name}.csv
+            </a>
+        </div>
+        """
+        st.markdown(btn_html, unsafe_allow_html=True)
+
+    except Exception as e:
+        failed.append((hotel_name, str(e)))
+
+st.markdown('</div>', unsafe_allow_html=True)
+
 
     except Exception as e:
         failed.append((hotel_name, str(e)))
