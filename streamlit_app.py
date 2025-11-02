@@ -82,7 +82,7 @@ st.markdown(
 )
 
 # -------------------------------
-# CUSTOM CSS FOR DOWNLOAD BUTTONS (RESPONSIVE)
+# CUSTOM CSS FOR DOWNLOAD BUTTONS (FULLY RESPONSIVE)
 # -------------------------------
 st.markdown(
     """
@@ -91,10 +91,24 @@ st.markdown(
     display: flex;
     flex-wrap: wrap;
     gap: 12px;
+    margin-bottom: 20px;
 }
+/* Default: 3 columns */
 .download-item {
-    flex: 1 1 30%; /* default ~3 items per row */
-    min-width: 220px; /* ensures button isn't too small on mobile */
+    flex: 1 1 calc(33.33% - 12px);
+    min-width: 220px;
+}
+/* Medium screens: 2 columns */
+@media (max-width: 992px) {
+    .download-item {
+        flex: 1 1 calc(50% - 12px);
+    }
+}
+/* Small screens: 1 column */
+@media (max-width: 576px) {
+    .download-item {
+        flex: 1 1 100%;
+    }
 }
 .custom-download button {
     background-color: #5392ca !important;
@@ -193,6 +207,7 @@ if failed:
     st.warning("⚠️ Some hotels failed to load:")
     for h, e in failed:
         st.text(f"{h}: {e}")
+
 
 
 
