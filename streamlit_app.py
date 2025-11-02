@@ -31,8 +31,6 @@ import streamlit as st
 # Initialize session state
 import streamlit as st
 
-PASSWORD = "your_password_here"
-
 # Header with logo (always visible)
 st.markdown(
     """
