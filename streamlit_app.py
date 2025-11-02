@@ -56,6 +56,8 @@ st.markdown(
     unsafe_allow_html=True
 )
 
+st.markdown("#### BAR Urejevalnik")
+
 #Sheet URL - new tab
 sheet_url = "https://docs.google.com/spreadsheets/d/15HJ7wxyUmo-gcl5_y1M9gl4Ti-JSsYEJZCjoI76s-Xk/edit?gid=1385640257"
 
@@ -88,7 +90,6 @@ st.markdown(f"""
 """, unsafe_allow_html=True)
 
 # Embed Google Sheet
-st.markdown("#### BAR Urejevalnik")
 st.components.v1.iframe(
     "https://docs.google.com/spreadsheets/d/15HJ7wxyUmo-gcl5_y1M9gl4Ti-JSsYEJZCjoI76s-Xk/edit?gid=1385640257",
     height=550,
