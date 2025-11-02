@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 # streamlit_app.py
 import os
 import pandas as pd
@@ -13,7 +11,7 @@ import streamlit as st
 # ENVIRONMENT & PASSWORD SETUP
 # -------------------------------
 load_dotenv()
-PASSWORD = os.getenv("MY",)  # fallback if not set
+PASSWORD = os.getenv("MY", "test")  # fallback if not set
 
 # -------------------------------
 # PAGE CONFIG
@@ -39,58 +37,80 @@ if not st.session_state.authenticated:
     st.stop()
 
 # -------------------------------
-# HEADER & EMBEDDED SHEET
+# HEADER
 # -------------------------------
 st.markdown(
-    """
-    <div style="display:flex;justify-content:space-between;align-items:center;">
-        <h2><b>EXPORT</b>4PHOBS</h2>
-        <img src="https://www.adria-ankaran.si//app/uploads/2025/10/logo-Adria.jpg" width="180" alt="">
-    </div>
-    <hr>
-    """,
-    unsafe_allow_html=True
-)
-
-st.markdown("### 📊 Linked Google Sheet (PHOBS Master Data)")
-st.components.v1.iframe(
-    "https://docs.google.com/spreadsheets/d/15HJ7wxyUmo-gcl5_y1M9gl4Ti-JSsYEJZCjoI76s-Xk/edit?gid=1385640257",
-    height=550,
+"""
+<div style="display:flex;justify-content:space-between;align-items:center;">
+  <h2><b>EXPORT</b>4PHOBS</h2>
+  <img src="https://www.adria-ankaran.si//app/uploads/2025/10/logo-Adria.jpg" width="180" alt="">
+</div>
+<hr>
+""", unsafe_allow_html=True
 )
 
 # -------------------------------
-# CUSTOM CSS (COLORS)
+# GOOGLE SHEET BUTTON (Open in New Tab)
 # -------------------------------
-st.markdown("""
+gsheet_link = "https://docs.google.com/spreadsheets/d/15HJ7wxyUmo-gcl5_y1M9gl4Ti-JSsYEJZCjoI76s-Xk/edit?usp=sharing"
+st.markdown(
+    f"""
+<div style="margin-bottom:20px;">
+    <a href="{gsheet_link}" target="_blank" 
+       style="background-color:#2ecc71;color:white;padding:12px 20px;
+              text-decoration:none;border-radius:8px;font-weight:600;">
+        📄 Open Google Sheet (Editable)
+    </a>
+</div>
+""", unsafe_allow_html=True
+)
+
+# -------------------------------
+# CUSTOM CSS FOR BUTTONS
+# -------------------------------
+st.markdown(
+"""
 <style>
-/* Base button styling */
+/* Orange Reload button */
 div[data-testid="stButton"] > button:first-child {
     border-radius: 8px;
     font-weight: 600;
     padding: 0.6em 1.2em;
     border: none;
-}
-/* Orange Reload button */
-div[data-testid="stButton"] > button[kind="primary"] {
     background-color: #f39c12 !important;
     color: white !important;
 }
-/* Blue Adria download buttons */
+
+/* Responsive Blue download buttons */
+.button-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+.button-item {
+    flex: 1 1 250px;  /* min width 250px, grows */
+}
 .custom-download a {
     text-decoration: none;
     background-color: #5392ca;
     color: white;
-    padding: 8px 14px;
-    border-radius: 6px;
-    display: inline-block;
+    padding: 10px 16px;
+    border-radius: 8px;
+    display: block;
+    width: 100%;
+    text-align: center;
     font-weight: 600;
-    transition: 0.3s;
+    transition: all 0.25s ease;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
 }
 .custom-download a:hover {
     background-color: #417fb4;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.15);
 }
 </style>
-""", unsafe_allow_html=True)
+""", unsafe_allow_html=True
+)
 
 # -------------------------------
 # HELPER FUNCTIONS
@@ -110,15 +130,16 @@ def convert_df_to_csv_download(df):
     return df.to_csv(index=False, header=False).encode("utf-8")
 
 # -------------------------------
-# MAIN EXPORT SECTION
+# RELOAD BUTTON
 # -------------------------------
 st.markdown("## ⚙️ PHOBS BAR Export .csv Generator")
-
-# Orange Reload button
-if st.button("🔄 Reload Data", type="primary"):
+if st.button("🔄 Reload Data"):
     st.cache_data.clear()
-    st.rerun()
+    st.experimental_rerun()
 
+# -------------------------------
+# LOAD MASTER DATA
+# -------------------------------
 @st.cache_data(ttl=600)
 def load_master_data():
     gsheet_id = "15HJ7wxyUmo-gcl5_y1M9gl4Ti-JSsYEJZCjoI76s-Xk"
@@ -135,11 +156,10 @@ except Exception as e:
 st.caption(f"Last refreshed at: {datetime.now().strftime('%H:%M:%S')}")
 
 # -------------------------------
-# LOAD INDIVIDUAL HOTEL SHEETS
+# RESPONSIVE DOWNLOAD BUTTON GRID
 # -------------------------------
 gsheet_id = "15HJ7wxyUmo-gcl5_y1M9gl4Ti-JSsYEJZCjoI76s-Xk"
-col_count = 3
-cols = st.columns(col_count)
+buttons_html = ""
 failed = []
 
 for idx, row in master_df.iterrows():
@@ -154,15 +174,20 @@ for idx, row in master_df.iterrows():
         csv_data = convert_df_to_csv_download(df)
         b64 = base64.b64encode(csv_data).decode()
         href = f'data:text/csv;base64,{b64}'
-        btn_html = f"""
-        <div class='custom-download' style='margin:6px 0;'>
-          <a href="{href}" download="{hotel_name}-Phobs.csv">📥 {hotel_name}.csv</a>
+
+        buttons_html += f"""
+        <div class='button-item custom-download'>
+            <a href="{href}" download="{hotel_name}-Phobs.csv">📥 {hotel_name}.csv</a>
         </div>
         """
-        with cols[idx % col_count]:
-            st.markdown(btn_html, unsafe_allow_html=True)
     except Exception as e:
         failed.append((hotel_name, str(e)))
+
+st.markdown(f"""
+<div class="button-grid">
+{buttons_html}
+</div>
+""", unsafe_allow_html=True)
 
 if failed:
     st.warning("⚠️ Some hotels failed to load:")
