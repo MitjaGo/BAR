@@ -146,6 +146,14 @@ st.markdown("""
     </style>
 """, unsafe_allow_html=True)
 
+st.markdown(f"""
+    <a href="{sheet_url}" target="_blank">
+        <button class="google-sheet-button">
+           Odpri v Google Sheet v novem oknu
+        </button>
+    </a>
+""", unsafe_allow_html=True)
+
 
 st.markdown("#### BAR Export.csv Generator")
 
