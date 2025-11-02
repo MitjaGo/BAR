@@ -40,7 +40,7 @@ st.markdown(
         align-items: center;
         margin-bottom: 10px;
     ">
-        <h2 style="margin: 0;"><b>EXPORT</b>4PHOBS</h2>
+        <h2 style="margin: 0;"><b>!EXPORT</b>4PHOBS</h2>
         <img src="https://www.adria-ankaran.si//app/uploads/2025/10/logo-Adria.jpg" width="180" alt="Logo">
     </div>
     <hr style="border: 1px solid #ddd;">
@@ -79,7 +79,7 @@ if not st.session_state.authenticated:
         if password == PASSWORD:
             st.session_state.authenticated = True
         else:
-            st.error("❌ Incorrect password. Please try again.")
+            st.error("❌ Geslo ni pravilno. Prosim vnesite ga ponovno.")
 
     st.stop()  # stop here if not authenticated
 
