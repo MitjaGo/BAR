@@ -227,9 +227,8 @@ if st.button("🔄 Osveži podatke"):
 
 @st.cache_data(ttl=600)  # cache for 10 minutes
 def load_master_data():
-    sheet_url = f"https://docs.google.com/spreadsheets/d/{sheet_id}/edit?rm=demo"
-    gsheet_id = "15HJ7wxyUmo-gcl5_y1M9gl4Ti-JSsYEJZCjoI76s-Xk"
-    master_url = f"https://docs.google.com/spreadsheets/d/{sheet_url/gviz/tq?tqx=out:csv&sheet=PHOBS"
+    gsheet_id = "{sheet_id}"
+    master_url = f"https://docs.google.com/spreadsheets/d/{sheet_id}/gviz/tq?tqx=out:csv&sheet=PHOBS"
     master_df = pd.read_csv(master_url)
     return master_df
 
@@ -246,7 +245,7 @@ st.caption(f"Last refreshed at: {datetime.now().strftime('%H:%M:%S')}")
 # -------------------------------
 # Load individual hotel sheets
 # -------------------------------
-gsheet_id = "15HJ7wxyUmo-gcl5_y1M9gl4Ti-JSsYEJZCjoI76s-Xk"
+gsheet_id = "{sheet_id}"
 
 col_count = 3
 cols = st.columns(col_count)
