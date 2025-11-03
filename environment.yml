@@ -6,7 +6,7 @@ dependencies:
   - notebook
   - ipython
   - streamlit
-  - panda
+  - pandas
   - gspread=
   - google-auth
   - st-excel-table
