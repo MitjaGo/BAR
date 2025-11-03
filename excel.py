@@ -8,13 +8,11 @@ import streamlit.components.v1 as components
 # -------------------------------
 # PAGE CONFIG
 # -------------------------------
-st.set_page_config(page_title="EXPORT4PHOBS", layout="wide")
+st.set_page_config(page_title="*EXPORT4PHOBS", layout="wide")
 
 # -------------------------------
-# PASSWORD LOGIN
-# -------------------------------
-PASSWORD = st.secrets.get("MY_PASSWORD", "")
-
+# Get password from Streamlit Secrets
+PASSWORD = st.secrets["MY_PASSWORD"]
 
 # Initialize session state
 if "authenticated" not in st.session_state:
@@ -22,10 +20,15 @@ if "authenticated" not in st.session_state:
 if "login_attempted" not in st.session_state:
     st.session_state.login_attempted = False
 
-# Header
+# Header with logo (always visible)
 st.markdown(
     """
-    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+    <div style="
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 10px;
+    ">
         <h2 style="margin: 0;"><b>EXPORT</b>4PHOBS</h2>
         <img src="https://www.adria-ankaran.si//app/uploads/2025/10/logo-Adria.jpg" width="180" alt="Logo">
     </div>
@@ -34,11 +37,13 @@ st.markdown(
     unsafe_allow_html=True
 )
 
-# Login
-if not st.session_state.authenticated:
+# Login screen
+if not st.session_state.authenticated:    
     st.markdown("## 🔒 Za dostop do aplikacije se prijavi")
+
     password = st.text_input("Vnesi geslo", type="password")
 
+    # Style the login button
     st.markdown("""
         <style>
         div.stButton>button {
@@ -58,9 +63,12 @@ if not st.session_state.authenticated:
             st.session_state.authenticated = True
         else:
             st.error("❌ Geslo ni pravilno. Prosim za ponoven vnos.")
-    st.stop()
 
+    st.stop()  # stop here if not authenticated
+
+# App content for authenticated users
 st.write("✅ Uspešno ste prijavljeni! Dobrodošli v aplikaciji.")
+
 
 # -------------------------------
 # MAIN APP (after login)
