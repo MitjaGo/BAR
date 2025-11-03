@@ -5,7 +5,8 @@ dependencies:
   - python=3.11
   - notebook
   - ipython
-  - gspread==5.7.2
+  - streamlit
+  - gspread
   - ipywidgets
   - numpy 
   - pandas 
