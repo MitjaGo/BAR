@@ -1,79 +1,277 @@
-import streamlit as st
-import gspread
-from google.oauth2.service_account import Credentials
+# -*- coding: utf-8 -*-
+#psswd .secrets on app UI streamlit#
+
+
+
+import os
 import pandas as pd
-from st_excel_table import Table
+import urllib.parse
+import base64
+from datetime import datetime
+import streamlit as st
 
-# ------------------------------
-# Streamlit Cloud Secrets Setup
-# ------------------------------
-# Make sure your secrets.toml has:
-# SPREADSHEET, PRIVATE_KEY, CLIENT_EMAIL
+# -------------------------------
+# PAGE CONFIG
+# -------------------------------
+st.set_page_config(page_title="EXPORT4PHOBS", layout="wide")
 
-SPREADSHEET_ID = st.secrets["SPREADSHEET"]
+# -------------------------------
+# PASSWORD LOGIN
+# -------------------------------
 
-# List of sheet names
-SHEET_NAMES = [
-    "🟠 APP_ADRIA",
-    "🟡 PREMIUM_MOBHOMES",
-    "🟢 OLIVE_SUITES",
-    "🟤 H_CONVENT",
-    "🔵 VILE_Z_BLK",
-    "🟣 VILE_BREZ_BLK",
-    "🔴 STD_MOBHOMES",
-    "PHOBS"
-]
+# Get password from Streamlit Secrets
+PASSWORD = st.secrets["MY_PASSWORD"]
 
-# ------------------------------
-# Google Sheets Authentication
-# ------------------------------
-creds = Credentials.from_service_account_info(
-    {
-        "type": "service_account",
-        "private_key": st.secrets["PRIVATE_KEY"],
-        "client_email": st.secrets["CLIENT_EMAIL"],
-        "token_uri": "https://oauth2.googleapis.com/token"
-    }
+# Initialize session state
+if "authenticated" not in st.session_state:
+    st.session_state.authenticated = False
+if "login_attempted" not in st.session_state:
+    st.session_state.login_attempted = False
+
+# Header with logo (always visible)
+st.markdown(
+    """
+    <div style="
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 10px;
+    ">
+        <h2 style="margin: 0;"><b>EXPORT</b>4PHOBS</h2>
+        <img src="https://www.adria-ankaran.si//app/uploads/2025/10/logo-Adria.jpg" width="180" alt="Logo">
+    </div>
+    <hr style="border: 1px solid #ddd;">
+    """,
+    unsafe_allow_html=True
 )
 
-gc = gspread.authorize(creds)
+# Login screen
+if not st.session_state.authenticated:    
+    st.markdown("## 🔒 Za dostop do aplikacije se prijavi")
 
-# ------------------------------
-# Streamlit App
-# ------------------------------
-st.title("Google Sheets Editable Tables")
+    password = st.text_input("Vnesi geslo", type="password")
 
-for sheet_name in SHEET_NAMES:
-    st.header(f"Sheet: {sheet_name}")
+    # Style the login button
+    st.markdown("""
+        <style>
+        div.stButton>button {
+            background-color: #1cb319;
+            color: white;
+            cursor: pointer;
+        }
+        div.stButton>button:hover {
+            background-color: #4fb34d;
+        }
+        </style>
+    """, unsafe_allow_html=True)
+
+    if st.button("Odkleni Aplikacijo"):
+        st.session_state.login_attempted = True
+        if password == PASSWORD:
+            st.session_state.authenticated = True
+        else:
+            st.error("❌ Geslo ni pravilno. Prosim za ponoven vnos.")
+
+    st.stop()  # stop here if not authenticated
+
+# App content for authenticated users
+st.write("✅ Uspešno ste prijavljeni! Dobrodošli v aplikaciji.")
+
+
+# -------------------------------
+# MAIN APP (after login)
+# -------------------------------
+
+
+# BAR Urejevalnik)
+st.markdown('<span style="color:green;font-size:30px; font-weight:bold;">BAR Urejevalnik</span>', unsafe_allow_html=True)
+
+
+#Sheet URL - new tab
+sheet_url = "https://docs.google.com/spreadsheets/d/15HJ7wxyUmo-gcl5_y1M9gl4Ti-JSsYEJZCjoI76s-Xk/edit?rm=demo"
+
+st.markdown("""
+    <style>
+    .google-sheet-button {
+        float: right;  /* Align button to the right */
+        background-color: #1cb319;
+        color: white;
+        padding: 0px 25px;
+        border-radius: 8px;
+        border: none;
+        font-size: 16px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+    }
+
+    .google-sheet-button:hover {
+        background-color: #4fb34d;
+    }
+    </style>
+""", unsafe_allow_html=True)
+
+st.markdown(f"""
+    <a href="{sheet_url}" target="_blank">
+        <button class="google-sheet-button">
+           Odpri v Google Sheet v novem oknu
+        </button>
+    </a>
+""", unsafe_allow_html=True)
+
+# Embed Google Sheet
+st.components.v1.iframe(
+    "https://docs.google.com/spreadsheets/d/15HJ7wxyUmo-gcl5_y1M9gl4Ti-JSsYEJZCjoI76s-Xk/edit?rm=demo",
+    height=550,
+)
+
+# -------------------------------
+# HELPER FUNCTIONS
+# -------------------------------
+def prepare_phobs_csv(df, hotel_id, los_code):
+    if 'BAR' not in df.columns:
+        df['BAR'] = 120
+    df['BAR'] = df['BAR'].apply(lambda x: f"BAR{x}")
+    df['Hotel_ID'] = hotel_id
+    df['nicla'] = 0
+    df['Yield'] = f"YIELD{los_code}"
+    if 'Datum' not in df.columns:
+        df['Datum'] = pd.Timestamp.today().strftime('%Y-%m-%d')
+    return df[['Hotel_ID', 'Datum', 'nicla', 'BAR', 'Yield']]
+
+def convert_df_to_csv_download(df):
+    return df.to_csv(index=False, header=False).encode("utf-8")
+
+# -------------------------------
+# MAIN PHOBS CSS COLORS
+# -------------------------------
+
+st.markdown(
+    """
+    <style>
+    .stButton>button {
+        background-color: #f6b221;
+        color: white;
+        cursor: pointer;
+    }
+
+    /* Hover effect */
+   .stButton>button:hover {
+        background-color: #f7c24f;
+    }
+    </style>
+    """,
+    unsafe_allow_html=True
+)
+
+
+st.markdown(
+    """
+    <style>
+    /* Style all download buttons */
+    .stDownloadButton>button {
+        background-color: #5392ca;
+        color: white;
+        cursor: pointer;
+    }
+
+    /* Hover effect */
+    .stDownloadButton>button:hover {
+        background-color: #4184bf;
+    }
+    </style>
+    """,
+    unsafe_allow_html=True
+)
+
+# -------------------------------
+# MAIN PHOBS EXPORTER
+# -------------------------------
+st.markdown('<hr style="border: 1px solid #ddd;">', unsafe_allow_html=True)
+
+st.markdown('<span style="color:green;font-size:25px; font-weight:bold;">BAR Export.csv Generator</span>', unsafe_allow_html=True)
+
+if st.button("🔄 Osveži podatke"):
+    st.cache_data.clear()
+    st.rerun()
+
+@st.cache_data(ttl=600)  # cache for 10 minutes
+def load_master_data():
+    gsheet_id = "15HJ7wxyUmo-gcl5_y1M9gl4Ti-JSsYEJZCjoI76s-Xk"
+    master_url = f"https://docs.google.com/spreadsheets/d/{gsheet_id}/gviz/tq?tqx=out:csv&sheet=PHOBS"
+    master_df = pd.read_csv(master_url)
+    return master_df
+
+try:
+    master_df = load_master_data()
+    st.success(f"✅ Loaded master sheet — {len(master_df)} hotels found.")
+except Exception as e:
+    st.error(f"❌ Failed to load master sheet: {e}")
+    st.stop()
+
+# Display last refresh time
+st.caption(f"Last refreshed at: {datetime.now().strftime('%H:%M:%S')}")
+
+# -------------------------------
+# Load individual hotel sheets
+# -------------------------------
+gsheet_id = "15HJ7wxyUmo-gcl5_y1M9gl4Ti-JSsYEJZCjoI76s-Xk"
+
+col_count = 3
+cols = st.columns(col_count)
+hotel_buttons = []
+
+failed = []
+for idx, row in master_df.iterrows():
+    hotel_name = row.get("Hotel_Name", "")
+    hotel_id = row.get("Hotel_ID", "")
+    los_code = row.get("YIELD_Code", "")
 
     try:
-        # Load the sheet
-        sheet = gc.open_by_url(st.secrets["SPREADSHEET"]).worksheet(sheet_name)
-        data = sheet.get_all_records()
-        df = pd.DataFrame(data)
+        sname = urllib.parse.quote(hotel_name)
+        url = f"https://docs.google.com/spreadsheets/d/{gsheet_id}/gviz/tq?tqx=out:csv&sheet={sname}"
+        df = pd.read_csv(url)
+        df = prepare_phobs_csv(df, hotel_id, los_code)
 
-        # Display editable table
-        Table(df.to_dict('records'), df.columns.tolist(), key=sheet_name)
-
-        # Save button for this sheet
-        if st.button(f"Save changes to {sheet_name}", key=f"save_{sheet_name}"):
-            # Get edited data from session_state
-            edited_data = st.session_state.get(
-                f"st_excel_table_data_{sheet_name}",
-                df.to_dict('records')
+        csv_data = convert_df_to_csv_download(df)
+        with cols[idx % col_count]:
+            st.download_button(
+                label=f"📥 {hotel_name}.csv",
+                data=csv_data,
+                file_name=f"{hotel_name}-Phobs.csv",
+                mime="text/csv",
+                use_container_width=True,
             )
-            edited_df = pd.DataFrame(edited_data)
-
-            # Clear existing sheet and update with new data
-            sheet.clear()
-            sheet.update([edited_df.columns.values.tolist()] + edited_df.values.tolist())
-
-            st.success(f"Data successfully updated to sheet: {sheet_name}!")
-
-    except gspread.WorksheetNotFound:
-        st.warning(f"Sheet '{sheet_name}' not found in this spreadsheet.")
     except Exception as e:
-        st.error(f"Error loading or updating sheet '{sheet_name}': {e}")
+        failed.append((hotel_name, str(e)))
+
+if failed:
+    st.warning("⚠️ Some hotels failed to load:")
+    for h, e in failed:
+        st.text(f"{h}: {e}")
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
