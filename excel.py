@@ -17,7 +17,7 @@ credentials = Credentials.from_service_account_file(
 gc = gspread.authorize(credentials)
 
 # Spreadsheet ID
-SPREADSHEET_ID = "YOUR_SPREADSHEET_ID"
+SPREADSHEET_ID = "1uLyYdoiNIymsuuiorgxtlg4ISqYkYZ2rs19-OytbN0c"
 
 # Sheet names
 SHEET_NAMES = [
