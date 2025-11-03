@@ -10,6 +10,7 @@ dependencies:
   - numpy 
   - pandas 
   - voila
+  - st-excel-table==0.1.6
   - nbgitpuller 
   - pip
   - pip:
