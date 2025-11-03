@@ -13,7 +13,8 @@ st.set_page_config(page_title="EXPORT4PHOBS", layout="wide")
 # -------------------------------
 # PASSWORD LOGIN
 # -------------------------------
-PASSWORD = st.secrets["MY_PASSWORD"]
+PASSWORD = st.secrets.get("MY_PASSWORD", "")
+
 
 # Initialize session state
 if "authenticated" not in st.session_state:
