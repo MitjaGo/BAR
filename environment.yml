@@ -7,7 +7,7 @@ dependencies:
   - ipython
   - streamlit
   - pandas
-  - gspread=
+  - gspread
   - google-auth
   - st-excel-table
   - ipywidgets
