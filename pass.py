@@ -1,21 +1,4 @@
-# -*- coding: utf-8 -*-
-
-
-# streamlit_app.py
-
-import os
-import pandas as pd
-import urllib.parse
-import base64
-from datetime import datetime
-from dotenv import load_dotenv
 import streamlit as st
-
-# -------------------------------
-# ENVIRONMENT & PASSWORD SETUP
-# -------------------------------
-load_dotenv()
-PASSWORD = os.getenv("MY")  # fallback password if not set
 
 # -------------------------------
 # PAGE CONFIG
@@ -26,10 +9,14 @@ st.set_page_config(page_title="EXPORT4PHOBS", layout="wide")
 # PASSWORD LOGIN
 # -------------------------------
 
-import streamlit as st
+# Get password from Streamlit Secrets
+PASSWORD = st.secrets["MY_PASSWORD"]
 
 # Initialize session state
-import streamlit as st
+if "authenticated" not in st.session_state:
+    st.session_state.authenticated = False
+if "login_attempted" not in st.session_state:
+    st.session_state.login_attempted = False
 
 # Header with logo (always visible)
 st.markdown(
@@ -47,12 +34,6 @@ st.markdown(
     """,
     unsafe_allow_html=True
 )
-
-# Initialize session state
-if "authenticated" not in st.session_state:
-    st.session_state.authenticated = False
-if "login_attempted" not in st.session_state:
-    st.session_state.login_attempted = False
 
 # Login screen
 if not st.session_state.authenticated:    
@@ -84,6 +65,8 @@ if not st.session_state.authenticated:
     st.stop()  # stop here if not authenticated
 
 # App content for authenticated users
+st.write("✅ Uspešno ste prijavljeni! Dobrodošli v aplikaciji.")
+
 
 # -------------------------------
 # MAIN APP (after login)
