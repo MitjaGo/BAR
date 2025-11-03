@@ -2,13 +2,10 @@ name: myenv
 channels:
   - conda-forge
 dependencies:
-  - python
+  - python=3.11
   - notebook
   - ipython
-  - streamlit
   - gspread
-  - google-auth
-  - st-excel-table
   - ipywidgets
   - numpy 
   - pandas 
@@ -17,4 +14,3 @@ dependencies:
   - pip
   - pip:
       - python-dotenv
-
