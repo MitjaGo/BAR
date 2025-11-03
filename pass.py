@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
-#psswd .secrets#
+#psswd .secrets on app UI streamlit#
 
-# streamlit_app.py
+
 
 import os
 import pandas as pd
