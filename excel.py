@@ -7,7 +7,7 @@ from st_excel_table import Table
 # ------------------------------
 # Google Sheets setup
 # ------------------------------
-SERVICE_ACCOUNT_FILE = "path/to/service_account.json"  # <-- replace with your JSON file path
+SERVICE_ACCOUNT_FILE = "vital-range-477116-f5-2c147eedcefb.json"  # <-- replace with your JSON file path
 SCOPES = ["https://www.googleapis.com/auth/spreadsheets"]
 
 credentials = Credentials.from_service_account_file(
