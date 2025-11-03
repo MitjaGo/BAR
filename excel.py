@@ -48,7 +48,7 @@ for sheet_name in SHEET_NAMES:
 
     try:
         # Load the sheet
-        sheet = gc.open_by_key(SPREADSHEET_ID).worksheet(sheet_name)
+        sheet = gc.open_by_url(st.secrets["SPREADSHEET"]).worksheet(sheet_name)
         data = sheet.get_all_records()
         df = pd.DataFrame(data)
 
