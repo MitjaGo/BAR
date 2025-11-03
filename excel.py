@@ -1,12 +1,6 @@
-# -*- coding: utf-8 -*-
-#psswd .secrets on app UI streamlit#
-
-
-
 import os
 import pandas as pd
 import urllib.parse
-import base64
 from datetime import datetime
 import streamlit as st
 import streamlit.components.v1 as components
@@ -19,9 +13,7 @@ st.set_page_config(page_title="EXPORT4PHOBS", layout="wide")
 # -------------------------------
 # PASSWORD LOGIN
 # -------------------------------
-
-# Get password from Streamlit Secrets
-PASSWORD = st.secrets["MY_PASSWORD"]
+PASSWORD = st.secrets.get("MY_PASSWORD", "")
 
 # Initialize session state
 if "authenticated" not in st.session_state:
@@ -29,15 +21,10 @@ if "authenticated" not in st.session_state:
 if "login_attempted" not in st.session_state:
     st.session_state.login_attempted = False
 
-# Header with logo (always visible)
+# Header
 st.markdown(
     """
-    <div style="
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-bottom: 10px;
-    ">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
         <h2 style="margin: 0;"><b>EXPORT</b>4PHOBS</h2>
         <img src="https://www.adria-ankaran.si//app/uploads/2025/10/logo-Adria.jpg" width="180" alt="Logo">
     </div>
@@ -46,13 +33,11 @@ st.markdown(
     unsafe_allow_html=True
 )
 
-# Login screen
-if not st.session_state.authenticated:    
+# Login
+if not st.session_state.authenticated:
     st.markdown("## 🔒 Za dostop do aplikacije se prijavi")
-
     password = st.text_input("Vnesi geslo", type="password")
 
-    # Style the login button
     st.markdown("""
         <style>
         div.stButton>button {
@@ -72,30 +57,27 @@ if not st.session_state.authenticated:
             st.session_state.authenticated = True
         else:
             st.error("❌ Geslo ni pravilno. Prosim za ponoven vnos.")
+    st.stop()
 
-    st.stop()  # stop here if not authenticated
-
-# App content for authenticated users
 st.write("✅ Uspešno ste prijavljeni! Dobrodošli v aplikaciji.")
-
 
 # -------------------------------
 # MAIN APP (after login)
 # -------------------------------
 
-
-# BAR Urejevalnik)
 st.markdown('<span style="color:green;font-size:30px; font-weight:bold;">BAR Urejevalnik</span>', unsafe_allow_html=True)
 
-import streamlit as st
+# Get spreadsheet ID from secrets safely
+sheet_id = st.secrets.get("sheet", {}).get("spreadsheet_id")
+if not sheet_id:
+    st.error("Spreadsheet ID is missing in Streamlit secrets!")
+    st.stop()
 
-# Get spreadsheet ID from Streamlit secrets
-sheet_id = st.secrets["sheet"]["spreadsheet_id"]
-
-# Build the full Google Sheet URL
+# Build URLs
 sheet_url = f"https://docs.google.com/spreadsheets/d/{sheet_id}/edit?rm=demo"
+master_url = f"https://docs.google.com/spreadsheets/d/{sheet_id}/gviz/tq?tqx=out:csv&sheet=PHOBS"
 
-# Custom CSS for the button
+# Custom CSS for button
 st.markdown("""
     <style>
     .google-sheet-button {
@@ -111,49 +93,26 @@ st.markdown("""
         text-align: center;
         text-decoration: none;
         display: inline-block;
+        margin-bottom: 20px;
     }
-
     .google-sheet-button:hover {
         background-color: #4fb34d;
-    }
-
-    .button-container {
-        margin-top: 20px;
-        margin-bottom: 20px;
     }
     </style>
 """, unsafe_allow_html=True)
 
-# Button HTML
+# Button to open sheet in new tab
 st.markdown(f"""
-    <div class="button-container">
-        <a href="{sheet_url}" target="_blank" class="google-sheet-button">
-           Odpri v Google Sheet v novem oknu
-        </a>
-    </div>
+    <a href="{sheet_url}" target="_blank" class="google-sheet-button">
+        Odpri v Google Sheet v novem oknu
+    </a>
 """, unsafe_allow_html=True)
 
-
-# Embed Google Sheet
-#st.components.v1.iframe(
-#    "https://docs.google.com/spreadsheets/d/15HJ7wxyUmo-gcl5_y1M9gl4Ti-JSsYEJZCjoI76s-Xk/edit?rm=demo",
-#    height=550,
-#)
-
-# Get spreadsheet ID from secrets
-sheet_id = st.secrets.get("sheet", {}).get("spreadsheet_id")
-
-if not sheet_id:
-    st.error("Spreadsheet ID is missing in Streamlit secrets!")
-else:
-    # Build the Google Sheet URL dynamically
-    sheet_url = f"https://docs.google.com/spreadsheets/d/{sheet_id}/edit?rm=demo"
-
-    # Embed the sheet in an iframe
-    components.iframe(
-        sheet_url,
-        height=550,
-    )
+# Embed Google Sheet in iframe
+components.iframe(
+    sheet_url,
+    height=550,
+)
 
 # -------------------------------
 # HELPER FUNCTIONS
@@ -173,85 +132,29 @@ def convert_df_to_csv_download(df):
     return df.to_csv(index=False, header=False).encode("utf-8")
 
 # -------------------------------
-# MAIN PHOBS CSS COLORS
+# MASTER DATA LOADING
 # -------------------------------
-
-st.markdown(
-    """
-    <style>
-    .stButton>button {
-        background-color: #f6b221;
-        color: white;
-        cursor: pointer;
-    }
-
-    /* Hover effect */
-   .stButton>button:hover {
-        background-color: #f7c24f;
-    }
-    </style>
-    """,
-    unsafe_allow_html=True
-)
-
-
-st.markdown(
-    """
-    <style>
-    /* Style all download buttons */
-    .stDownloadButton>button {
-        background-color: #5392ca;
-        color: white;
-        cursor: pointer;
-    }
-
-    /* Hover effect */
-    .stDownloadButton>button:hover {
-        background-color: #4184bf;
-    }
-    </style>
-    """,
-    unsafe_allow_html=True
-)
-
-# -------------------------------
-# MAIN PHOBS EXPORTER
-# -------------------------------
-st.markdown('<hr style="border: 1px solid #ddd;">', unsafe_allow_html=True)
-
-st.markdown('<span style="color:green;font-size:25px; font-weight:bold;">BAR Export.csv Generator</span>', unsafe_allow_html=True)
-
-if st.button("🔄 Osveži podatke"):
-    st.cache_data.clear()
-    st.rerun()
-
-@st.cache_data(ttl=600)  # cache for 10 minutes
-def load_master_data():
-    gsheet_id = "{sheet_id}"
+@st.cache_data(ttl=600)
+def load_master_data(sheet_id):
     master_url = f"https://docs.google.com/spreadsheets/d/{sheet_id}/gviz/tq?tqx=out:csv&sheet=PHOBS"
-    master_df = pd.read_csv(master_url)
-    return master_df
+    return pd.read_csv(master_url)
 
 try:
-    master_df = load_master_data()
+    master_df = load_master_data(sheet_id)
     st.success(f"✅ Loaded master sheet — {len(master_df)} hotels found.")
 except Exception as e:
     st.error(f"❌ Failed to load master sheet: {e}")
     st.stop()
 
-# Display last refresh time
 st.caption(f"Last refreshed at: {datetime.now().strftime('%H:%M:%S')}")
 
 # -------------------------------
 # Load individual hotel sheets
 # -------------------------------
-gsheet_id = "{sheet_id}"
-
 col_count = 3
 cols = st.columns(col_count)
-hotel_buttons = []
-
 failed = []
+
 for idx, row in master_df.iterrows():
     hotel_name = row.get("Hotel_Name", "")
     hotel_id = row.get("Hotel_ID", "")
@@ -259,7 +162,7 @@ for idx, row in master_df.iterrows():
 
     try:
         sname = urllib.parse.quote(hotel_name)
-        url = f"https://docs.google.com/spreadsheets/d/{gsheet_id}/gviz/tq?tqx=out:csv&sheet={sname}"
+        url = f"https://docs.google.com/spreadsheets/d/{sheet_id}/gviz/tq?tqx=out:csv&sheet={sname}"
         df = pd.read_csv(url)
         df = prepare_phobs_csv(df, hotel_id, los_code)
 
@@ -279,6 +182,7 @@ if failed:
     st.warning("⚠️ Some hotels failed to load:")
     for h, e in failed:
         st.text(f"{h}: {e}")
+
 
 
 
