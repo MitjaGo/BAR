@@ -9,6 +9,7 @@ import urllib.parse
 import base64
 from datetime import datetime
 import streamlit as st
+import streamlit.components.v1 as components
 
 # -------------------------------
 # PAGE CONFIG
@@ -86,43 +87,73 @@ st.write("✅ Uspešno ste prijavljeni! Dobrodošli v aplikaciji.")
 # BAR Urejevalnik)
 st.markdown('<span style="color:green;font-size:30px; font-weight:bold;">BAR Urejevalnik</span>', unsafe_allow_html=True)
 
+import streamlit as st
 
-#Sheet URL - new tab
-sheet_url = "https://docs.google.com/spreadsheets/d/15HJ7wxyUmo-gcl5_y1M9gl4Ti-JSsYEJZCjoI76s-Xk/edit?rm=demo"
+# Get spreadsheet ID from Streamlit secrets
+sheet_id = st.secrets["sheet"]["spreadsheet_id"]
 
+# Build the full Google Sheet URL
+sheet_url = f"https://docs.google.com/spreadsheets/d/{sheet_id}/edit?rm=demo"
+
+# Custom CSS for the button
 st.markdown("""
     <style>
     .google-sheet-button {
-        float: right;  /* Align button to the right */
+        float: right;
         background-color: #1cb319;
         color: white;
-        padding: 0px 25px;
+        padding: 8px 25px;
         border-radius: 8px;
         border: none;
         font-size: 16px;
         cursor: pointer;
         transition: background-color 0.3s;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
     }
 
     .google-sheet-button:hover {
         background-color: #4fb34d;
     }
+
+    .button-container {
+        margin-top: 20px;
+        margin-bottom: 20px;
+    }
     </style>
 """, unsafe_allow_html=True)
 
+# Button HTML
 st.markdown(f"""
-    <a href="{sheet_url}" target="_blank">
-        <button class="google-sheet-button">
+    <div class="button-container">
+        <a href="{sheet_url}" target="_blank" class="google-sheet-button">
            Odpri v Google Sheet v novem oknu
-        </button>
-    </a>
+        </a>
+    </div>
 """, unsafe_allow_html=True)
 
+
 # Embed Google Sheet
-st.components.v1.iframe(
-    "https://docs.google.com/spreadsheets/d/15HJ7wxyUmo-gcl5_y1M9gl4Ti-JSsYEJZCjoI76s-Xk/edit?rm=demo",
-    height=550,
-)
+#st.components.v1.iframe(
+#    "https://docs.google.com/spreadsheets/d/15HJ7wxyUmo-gcl5_y1M9gl4Ti-JSsYEJZCjoI76s-Xk/edit?rm=demo",
+#    height=550,
+#)
+
+# Get spreadsheet ID from secrets
+sheet_id = st.secrets.get("sheet", {}).get("spreadsheet_id")
+
+if not sheet_id:
+    st.error("Spreadsheet ID is missing in Streamlit secrets!")
+else:
+    # Build the Google Sheet URL dynamically
+    sheet_url = f"https://docs.google.com/spreadsheets/d/{sheet_id}/edit?rm=demo"
+
+    # Embed the sheet in an iframe
+    components.iframe(
+        sheet_url,
+        height=550,
+    )
 
 # -------------------------------
 # HELPER FUNCTIONS
