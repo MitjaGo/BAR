@@ -1,4 +1,4 @@
 # Ignore local secrets and caches
 .env
 git rm --cached .env
-
+.streamlit/secrets.toml
