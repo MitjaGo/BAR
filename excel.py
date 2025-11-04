@@ -5,7 +5,6 @@ import os
 import pandas as pd
 import urllib.parse
 import base64
-from datetime import datetime
 import streamlit as st
 
 # -------------------------------
@@ -180,7 +179,9 @@ def prepare_phobs_csv(df, hotel_id, los_code):
     df['nicla'] = 0
     df['Yield'] = f"YIELD{los_code}"
     if 'Datum' not in df.columns:
-        df['Datum'] = pd.Timestamp.today().strftime('%Y-%m-%d')
+        #df['Datum'] = pd.Timestamp.today().strftime('%Y-%m-%d')
+        df['Datum'] = pd.Timestamp.now(tz='Europe/Belgrade').strftime('%Y-%m-%d')
+
     return df[['Hotel_ID', 'Datum', 'nicla', 'BAR', 'Yield']]
 
 def convert_df_to_csv_download(df):
@@ -208,7 +209,14 @@ except Exception as e:
     st.error(f"❌ Failed to load master sheet: {e}")
     st.stop()
 
-st.caption(f"Last refreshed at: {datetime.now().strftime('%H:%M:%S')}")
+#st.caption(f"Last refreshed at: {datetime.now().strftime('%H:%M:%S')}")
+time_str = pd.Timestamp.now(tz='Europe/Belgrade').strftime('%H:%M:%S')
+
+st.markdown(
+    f"<p style='color:black;'>Last refreshed at: {time_str}</p>",
+    unsafe_allow_html=True
+)
+
 
 # -------------------------------
 # Load individual hotel sheets
