@@ -177,12 +177,14 @@ def prepare_phobs_csv(df, hotel_id, los_code):
     df['BAR'] = df['BAR'].apply(lambda x: f"BAR{x}")
     df['Hotel_ID'] = hotel_id
     df['nicla'] = 0
-    df['Yield'] = f"YIELD{los_code}"
+    df['YIELD'] = f"YIELD{los_code}"
+    if 'MINPCKG' not in df.columns:
+        df['MINPCKG'] = 3
     if 'Datum' not in df.columns:
         #df['Datum'] = pd.Timestamp.today().strftime('%Y-%m-%d')
         df['Datum'] = pd.Timestamp.now(tz='Europe/Belgrade').strftime('%Y-%m-%d')
 
-    return df[['Hotel_ID', 'Datum', 'nicla', 'BAR', 'Yield']]
+    return df[['Hotel_ID', 'Datum', 'nicla', 'BAR', 'YIELD', 'MINPCKG']]
 
 def convert_df_to_csv_download(df):
     return df.to_csv(index=False, header=False).encode("utf-8")
