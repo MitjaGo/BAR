@@ -94,6 +94,8 @@ if not sheet_id:
 # Construct the full sheet URL
 sheet_url = f"https://docs.google.com/spreadsheets/d/{sheet_id}/edit?rm=demo"
 
+#BUTTON STYLING CSS#
+
 # Button styling
 st.markdown("""
     <style>
@@ -113,6 +115,47 @@ st.markdown("""
     }
     </style>
 """, unsafe_allow_html=True)
+
+
+st.markdown(
+    """
+    <style>
+    .stButton>button {
+        background-color: #f6b221;
+        color: white;
+        cursor: pointer;
+    }
+
+    /* Hover effect */
+   .stButton>button:hover {
+        background-color: #f7c24f;
+    }
+    </style>
+    """,
+    unsafe_allow_html=True
+)
+
+
+st.markdown(
+    """
+    <style>
+    /* Style all download buttons */
+    .stDownloadButton>button {
+        background-color: #5392ca;
+        color: white;
+        cursor: pointer;
+    }
+
+    /* Hover effect */
+    .stDownloadButton>button:hover {
+        background-color: #4184bf;
+    }
+    </style>
+    """,
+    unsafe_allow_html=True
+)
+
+#-------------------------
 
 # Open Sheet button
 st.markdown(f"""
