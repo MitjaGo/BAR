@@ -213,7 +213,7 @@ except Exception as e:
 time_str = pd.Timestamp.now(tz='Europe/Belgrade').strftime('%H:%M:%S')
 
 st.markdown(
-    f"<p style='color:#A0A0A0; font-weight:bold;'>Last refreshed at: {time_str}</p>",
+    f"<p style='color:#A0A0A0; font-weight:bold;'>Nazadnje osveženi podatki ob {time_str}</p>",
     unsafe_allow_html=True
 )
 
