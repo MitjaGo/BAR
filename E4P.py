@@ -208,7 +208,7 @@ except Exception as e:
     st.error(f"❌ Failed to load master sheet: {e}")
     st.stop()
 
-st.caption(f"Last refreshed at: {datetime.now().strftime('%H:%M:%S')}")
+st.caption(f"Nazadnje posodobljeni podatki za kreiranje .csv: {datetime.now().strftime('%H:%M:%S')}")
 
 # -------------------------------
 # Load individual hotel sheets
