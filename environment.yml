@@ -14,4 +14,5 @@ dependencies:
   - pip
   - pip:
       - python-dotenv
-  - yt_dlp
+  - yt-dlp>=2025.11.7
+  - tqdm>=4.65.0
